@@ -1,6 +1,14 @@
 #!/usr/bin/env node
+
+// Clear Console
 console.clear();
-console.info("Starting...");
+
+// Set Environment
+console.info(`Using enviroment file : ".env.${process.env.NODE_ENV||"DEV"}"`);
+require('dotenv').config({
+    path: `.env.${process.env.NODE_ENV||"DEV"}`
+})
+
 
 /**
  * Module dependencies.

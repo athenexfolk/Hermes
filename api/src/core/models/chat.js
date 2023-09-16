@@ -3,11 +3,11 @@ const mongoose = require("mongoose")
 const chatSchema = mongoose.Schema({
     type: String,
     members: [{
-        id: String,
+        _id: String,
         joinedTime: Date
     }],
     color: String,
     image: String
-})
+}, { versionKey: false })
 
 module.exports = chatSchema

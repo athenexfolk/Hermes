@@ -6,6 +6,6 @@ const messageSchema = mongoose.Schema({
     content: {},
     sendTime: Date,
     chatID: ObjectId
-})
+}, { versionKey: false })
 
 module.exports = messageSchema

@@ -38,10 +38,8 @@ function onConnection(socket) {
     addOnMessageHandler(socket);
 }
 
-function addOnMessageHandler(socket){
+function addOnMessageHandler(socket) {
     socket.on("message:send", async context => {
-        if(!context.chatContent || !context.chatID)
-            return saveMessageErrorHandeler(socket)(new Error("Couldn't send message"));
         const message = {
             senderID: socket.sub,
             content: context.chatContent,
@@ -49,17 +47,17 @@ function addOnMessageHandler(socket){
             sendTime: Date.now()
         };
         saveMessageToDb(message)
-            .then(result=>{
+            .then(result => {
                 message.messageID = result.result._id;
-                sendMessageTo(result.chatMembers,message);
+                sendMessageTo(result.chatMembers, message);
             })
             .catch(saveMessageErrorHandeler(socket));
     });
 };
 
-function saveMessageErrorHandeler(socket){
+function saveMessageErrorHandeler(socket) {
     return !!socket
-        ? (e)=> socket.emit("message",e.message)
+        ? (e) => socket.emit("message", e.message)
         : console.error;
 }
 
@@ -85,9 +83,9 @@ function saveMessageToDb(context) {
         else {
             const msg = new MessageDao(context);
             await msg.save()
-                .then( r => resolve(/** @type {SavedMessageResult} */{
-                   chatMembers: chatmembers,
-                   result: r
+                .then(r => resolve(/** @type {SavedMessageResult} */{
+                    chatMembers: chatmembers,
+                    result: r
                 }))
                 .catch(e => reject(e));
         };
@@ -99,7 +97,7 @@ function saveMessageToDb(context) {
  * @param {Array<string>} dests - list of chat members's id
  * @param {Object} message - message object
  */
-function sendMessageTo(dests, message){
+function sendMessageTo(dests, message) {
     if (!Array.isArray(dests))
         dests = [dests];
 
