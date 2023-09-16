@@ -45,20 +45,36 @@ let body :{
 }
 ```
 
-- `GET` /account/token?id=anirut&password=1234&action=exange
+- `GET` /account/login
 
 ```typescript
+// [EX] GET /account/login?username=areya&password=1234 HTTP/1.1
 let query :{
-   id : string,
+   username : string,
    password: string? ,
-   action : "login" | "refresh"
 }
 
 let response :{
     tokenType : string,
     accessToken: string,
     refreshToken: string,
-    expiresIn: number
+    expiresIn: number | string
+}
+```
+
+- `GET` /account/token/refresh
+
+```typescript
+// [EX] GET /account/token/refresh?token=[jwt] HTTP/1.1
+let query :{
+   token:string
+}
+
+let response :{
+    tokenType : string,
+    accessToken: string,
+    refreshToken: string,
+    expiresIn: number | string
 }
 ```
 
@@ -91,7 +107,7 @@ let response : {
 
 ### Chat
 
-- `GET` /chat/contacts
+- `GET` /chats
 
 Attach Header `Authorization` : `Bearer [jwt]`
 
@@ -108,16 +124,16 @@ let response : [
 ]
 ```
 
-- `GET` /chat/histories
+- `GET` /chats/:ref
 
 pagenation query chat history
 
 attach Header `Authorization` : `Bearer [jwt]`
 
 ```javascript
-// query
+// params
 // ref=[messageID | chatID] to load more chat before ref message
-// ex. /chat?ref=messageID mean load chat history before ref message
+// ex. /chat/messageID mean load chat history before ref message
 
 // Response
 let response: [
@@ -130,6 +146,31 @@ let response: [
     }
 ]
 
+```
+
+- `POST` /chats
+
+Add new conversation
+
+Attach Header `Authorization` : `Bearer [jwt]`
+
+```Typescript
+let body : {
+    type: "private" | "group",
+    to : string[], //
+    chatName: string,
+    image: string,
+    color: string
+}
+
+let response:{
+        type: "group"|"private",
+        chatID: string,
+        chatName: string,
+        image: string,
+        colour: string,
+        lastMassage: any
+    }
 ```
 
 - `WS` /chat

@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersProfile = require('./features/users/users-profile.rout');
-var contacts = require('./features/chat-contact/chat-contact.rout')
 var authRouter = require('./authorization/auth.rout');
 var profileRouter = require('./features/profiles/profile.route');
 var chatRouter = require('./features/chats/chat.route');
@@ -31,11 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", 'public')));
 
 app.use('/', indexRouter);
-app.use('/profile', usersProfile);
 app.use('/account', authRouter);
-app.use('/chat', contacts)
 app.use('/profile', profileRouter);
-app.use('/chat', chatRouter);
+app.use('/chats', chatRouter);
 
 // GET /tmp to run tmp script for dev
 app.get('/temp', async (req, res) => {
