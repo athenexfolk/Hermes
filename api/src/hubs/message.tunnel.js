@@ -40,6 +40,8 @@ function onConnection(socket) {
 
 function addOnMessageHandler(socket) {
     socket.on("message:send", async context => {
+        if(!context.chatContent || !context.chatID)
+            return saveMessageErrorHandeler(socket)(new Error("Couldn't send message [invalid chat id or empty message]"));
         const message = {
             senderID: socket.sub,
             content: context.chatContent,
