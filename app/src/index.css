@@ -3,11 +3,19 @@
 @tailwind utilities;
 
 body {
- @apply text-gray-900
+    @apply text-gray-900;
 }
 
 input[type="search"],
 input[type="text"],
+input[type="password"],
 textarea {
-    @apply outline-0 ring-gray-300 focus:ring-4
+    @apply outline-0 ring-gray-300 focus:ring-2 transition-all;
+}
+
+.overlay-background {
+    background-image: url("logo/logo-900.svg");
+    background-position: center center;
+    background-size: contain;
+    @apply opacity-10;
 }
