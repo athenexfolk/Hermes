@@ -11,10 +11,13 @@
   },
   "proxy": "http://localhost:3000",
   "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.46.1",
     "react-router-dom": "^6.15.0",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

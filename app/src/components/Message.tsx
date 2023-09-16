@@ -20,7 +20,7 @@ function Message({ isSelf, msg }: MessageProps) {
                 timePanel(msg.timestamp)
             )}
             {msg.chatContent.type === MessageType.TEXT ? (
-                <div className="bg-gray-200 px-4 py-2 rounded-lg">
+                <div className="bg-gray-200 px-4 py-2 rounded-lg max-w-md flex">
                     {msg.chatContent.data}
                 </div>
             ) : (
@@ -33,6 +33,8 @@ function Message({ isSelf, msg }: MessageProps) {
     );
 }
 
-const timePanel = (time: Date) => <span className="text-xs self-end">{displayDate(time)}</span>;
+const timePanel = (time: Date) => (
+    <span className="text-xs self-end">{displayDate(time)}</span>
+);
 
 export default Message;

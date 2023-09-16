@@ -1,8 +1,7 @@
-const {virifyToken} = require('../services/token.service');
+const { verifyToken } = require('../services/token.service');
 
 const authGuard = async (socket, next) => {
-    const info = await virifyToken(socket.handshake.auth.token);
-    console.debug("token info received: ", info);
+    const info = await verifyToken(socket.handshake.auth.token);
     if (!!info.id) {
         socket.sub = info.id
         next();
