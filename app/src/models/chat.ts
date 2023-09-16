@@ -6,6 +6,6 @@ export interface Chat {
 }
 
 export enum ChatType {
-    PRIVATE,
-    GROUP
+    PRIVATE = "private",
+    GROUP = "group",
 }

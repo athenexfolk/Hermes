@@ -94,7 +94,7 @@ let response :{
 
 - `GET` /profile
 
-ttach Header `Authorization` : `Bearer [jwt]`
+Attach Header `Authorization` : `Bearer [jwt]`
 
 ```typescript
 let response : {
@@ -102,6 +102,22 @@ let response : {
     username: string,
     avatar: string,
     displayName: string
+}
+```
+
+- `PATCH` /profile/displayname/:displayname
+
+Attach Header `Authorization` : `Bearer [jwt]`
+
+`displayname` : New display name
+
+- `PATCH` /profile/avatar
+
+Attach Header `Authorization` : `Bearer [jwt]`
+
+```Typescript
+let body :{
+    ["b64-img"]: string
 }
 ```
 

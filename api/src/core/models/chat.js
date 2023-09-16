@@ -6,6 +6,7 @@ const chatSchema = mongoose.Schema({
         _id: String,
         joinedTime: Date
     }],
+    chatName: String,
     color: String,
     image: String
 }, { versionKey: false })
