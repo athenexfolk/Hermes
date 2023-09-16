@@ -1,10 +1,9 @@
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import Brand from "../layout/Sidebar/Brand/Brand";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import logo from "../../public/logo/logo-900.svg";
+import { Link } from "react-router-dom";
 function LoginPage() {
-
     type Person = {
         username: string;
         password: string;
@@ -24,7 +23,11 @@ function LoginPage() {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<Person>({ defaultValues, mode: "onBlur", resolver: yupResolver(schema) });
+    } = useForm<Person>({
+        defaultValues,
+        mode: "onBlur",
+        resolver: yupResolver(schema),
+    });
 
     // const auth = useAuth()
 
@@ -40,64 +43,84 @@ function LoginPage() {
     };
 
     return (
-        <div  className="h-screen justify-center items-center flex flex-col">
-            <Brand />
-            <div className="h-fit flex justify-center items-center bg-gray-50">
-
-                <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="bg-white w-fit p-6 rounded-lg shadow ">
-                        <div className="mb-4">
-                            <Controller
-                                name="username"
-                                control={control}
-                                rules={{ required: true }}
-                                render={({ field: { value, onChange, onBlur } }) => (
-                                    <input
-                                        className="px-4 py-2 rounded-lg border"
-                                        id="login-username"
-                                        value={value}
-                                        onBlur={onBlur}
-                                        onChange={onChange}
-                                        placeholder="Username"
-                                    />
-                                )}
-                            />
-                            {errors.username && (
-                                <p className="text-red-500 text-sm">{errors.username.message}</p>
-                            )}
-
-                            {/* <input type="text" className="px-4 py-2 rounded-lg border" placeholder="Username"></input> */}
-                        </div>
-                        <div className="mb-4">
-
-                            <Controller
-                                name="password"
-                                control={control}
-                                rules={{ required: true }}
-                                render={({ field: { value, onChange, onBlur } }) => (
-                                    <input
-                                        className="px-4 py-2 rounded-lg border"
-                                        id="login-password"
-                                        type="password"
-                                        value={value}
-                                        onBlur={onBlur}
-                                        onChange={onChange}
-                                        placeholder="Password"
-                                    />
-                                )}
-                            />
-                            {errors.password && (
-                                <p className="text-red-500 text-sm">{errors.password.message}</p>
-                            )}
-                            {/* <input type="password" className="px-4 py-2 rounded-lg border" placeholder="Password"></input> */}
-                        </div>
-                        <div className="mt-10 my-6 relative">
-                            <button type="submit" className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold">Login</button>
-                        </div>
-                        {/* <button className="tex-sm">Sign up</button> */}
+        <div className="h-screen flex justify-center items-center relative">
+            <div className="h-screen w-screen overlay-background absolute top-0 left-0 -z-10"></div>
+            <form
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <div className="bg-white/90 px-16 py-10 rounded-lg shadow flex flex-col">
+                    <div className="flex flex-col justify-center items-center gap-2 mb-8">
+                        <img src={logo} className="w-16 h-16"></img>
+                        <div className="font-bold text-xl">HermesCS</div>
                     </div>
-                </form>
-            </div>
+                    <div className="mb-4">
+                        <Controller
+                            name="username"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({
+                                field: { value, onChange, onBlur },
+                            }) => (
+                                <input
+                                    type="text"
+                                    className="px-4 py-2 rounded-lg border"
+                                    id="login-username"
+                                    value={value}
+                                    onBlur={onBlur}
+                                    onChange={onChange}
+                                    placeholder="Username"
+                                />
+                            )}
+                        />
+                        {errors.username && (
+                            <p className="text-red-500 text-sm">
+                                {errors.username.message}
+                            </p>
+                        )}
+
+                        {/* <input type="text" className="px-4 py-2 rounded-lg border" placeholder="Username"></input> */}
+                    </div>
+                    <div className="mb-4">
+                        <Controller
+                            name="password"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({
+                                field: { value, onChange, onBlur },
+                            }) => (
+                                <input
+                                    className="px-4 py-2 rounded-lg border"
+                                    id="login-password"
+                                    type="password"
+                                    value={value}
+                                    onBlur={onBlur}
+                                    onChange={onChange}
+                                    placeholder="Password"
+                                />
+                            )}
+                        />
+                        {errors.password && (
+                            <p className="text-red-500 text-sm">
+                                {errors.password.message}
+                            </p>
+                        )}
+                        {/* <input type="password" className="px-4 py-2 rounded-lg border" placeholder="Password"></input> */}
+                    </div>
+                    <div className="my-6 relative">
+                        <button
+                            type="submit"
+                            className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold"
+                        >
+                            Login
+                        </button>
+                    </div>
+                    <Link to={"/signup"} className="flex justify-center">
+                        <button className="tex-sm">Sign up</button>
+                    </Link>
+                </div>
+            </form>
         </div>
     );
 }
