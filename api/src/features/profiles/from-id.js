@@ -11,13 +11,10 @@ const { loadUserFromId } = require("../../services/token.service")
 /* GET users ID. */
 const usersProfileEndpoint = async (req, res) => {
     await loadUserFromId(req.params.id).then((user) => {
-        res.status(HTTP_STATUS.FOUND).json({
-            msg: "Found Content",
-            user: {
-                username: user._id,
-                avatar: user.avatar,
-                displayname: user.displayname
-            }
+        res.json({
+            username: user._id,
+            avatar: user.avatar,
+            displayname: user.displayname
         });
     }).catch((e) => {
         res.status(HTTP_STATUS.NOT_FOUND).json({

@@ -5,18 +5,18 @@ const MessageDao = require("../../dao/message.dao");
 const HISTORY_SIZE = 5;
 
 async function getChatHistory(req, res) {
-    if (!req.query.ref)
+    if (!req.params.ref)
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             error:"Invalid reference",
-            msg:"Query 'ref' should not be empty.",
+            msg:"Param 'ref' should not be empty. ref can be chat id or message id",
         })
-    else getChatHistoryFromRef(req.query.ref).then(h => {
+    else getChatHistoryFromRef(req.params.ref).then(h => {
         res.json(h.map(i => {
             return {
                 chatId: i.chatID,
                 messageId: i._id,
                 sender: i.senderID,
-                timestame: i.sendTime,
+                timestamp: i.sendTime,
                 chatContent: i.content
             }
         }).reverse());
