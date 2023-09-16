@@ -4,6 +4,7 @@ const getChatHistory = require('./chat-history');
 var router = express.Router();
 
 /* GET /profile */
-router.get('/histories',authGuard, getChatHistory);
+router.get('/',authGuard, getChatHistory);
+router.get('/:ref',authGuard, getChatHistory);
 
 module.exports = router;
