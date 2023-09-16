@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router";
 import { ChatHistory } from "../../models/chat-history";
 import { ChatContact } from "../../models/chat-contact";
+import { ResponseMessageContext } from "../../models/message-context";
 
 function ChatInterface() {
     const chatInfo = useLoaderData() as {
@@ -14,6 +15,13 @@ function ChatInterface() {
     };
 
     const [isChatSettingsOpen, setIsChatSettingsOpen] = useState(false);
+    const [newMessage, setNewMessage] = useState<ResponseMessageContext|null>(null)
+
+    const receiveFromTextBox = (response: ResponseMessageContext) => {
+        console.log(response);
+        setNewMessage(response)
+        return response;
+    };
 
     const handleSettingsDisplay = (isOpen: boolean) => {
         setIsChatSettingsOpen(isOpen);
@@ -21,14 +29,20 @@ function ChatInterface() {
     return (
         <div className="flex grow">
             <div className="h-screen grow">
-                <ChatHeader forContact={chatInfo.contact} settings={handleSettingsDisplay} />
+                <ChatHeader
+                    forContact={chatInfo.contact}
+                    settings={handleSettingsDisplay}
+                />
                 <div
                     className="relative"
                     style={{ height: `calc( 100vh - 136px)` }}
                 >
-                    <ChatBox data={chatInfo.history} />
+                    <ChatBox
+                        data={chatInfo.history}
+                        sendToChatBox={newMessage}
+                    />
                 </div>
-                <TextBox />
+                <TextBox chatId={chatInfo.contact.chatID} sendEmitter={receiveFromTextBox} />
             </div>
             <div>
                 {isChatSettingsOpen && (

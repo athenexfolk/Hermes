@@ -1,25 +1,58 @@
 import { useRef } from "react";
-import { socket } from "../../../socket";
+// import { socket } from "../../../socket";
+import {
+    MessageContext,
+    ResponseMessageContext,
+} from "../../../models/message-context";
+import { MessageType } from "../../../models/message";
+import { sendMessage as sendMsg } from "../../../services/chat-service";
 
-function TextBox() {
+interface TextBoxProps {
+    chatId: string;
+    sendEmitter: (response: ResponseMessageContext) => ResponseMessageContext;
+}
+
+function TextBox({ chatId, sendEmitter }: TextBoxProps) {
     const inputElement = useRef<HTMLInputElement>(null);
 
     const sendMessage = () => {
         if (inputElement.current) {
             const msg = inputElement.current.value;
             if (!msg.length) return;
-            socket.emit("message:send", msg);
+
+            const messageContext: MessageContext = {
+                chatId: chatId,
+                chatContent: { type: MessageType.TEXT, data: msg },
+            };
+            sendMsg(messageContext).then(sendEmitter);
+            inputElement.current.value = "";
+            inputElement.current.focus();
+
+            // socket.emit("message:send", messageContext);
         }
     };
+
+    const onEnter = (e: React.KeyboardEvent) => {
+        console.log("enter");
+
+        if (e.key === "Enter") {
+            sendMessage();
+        }
+    };
+
     return (
         <div className="border-t px-6 py-3 flex items-center gap-4 h-16">
             <input
+                onKeyUp={onEnter}
                 ref={inputElement}
                 type="text"
                 placeholder="Aa"
                 className="border rounded-full grow px-4 py-2"
             ></input>
-            <button onClick={sendMessage} className="p-2 text-sky-500 rounded-full hover:bg-sky-200">
+            <button
+                onClick={sendMessage}
+                className="p-2 text-sky-500 rounded-full hover:bg-sky-200"
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
