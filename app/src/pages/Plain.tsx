@@ -1,4 +1,7 @@
+import { login } from "../services/auth-service";
+
 function Plain() {
+    login('saksit','1234');
     return (
         <div className="grow h-screen flex flex-col justify-center items-center relative bg-gray-50">
             <img

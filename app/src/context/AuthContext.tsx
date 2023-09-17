@@ -1,14 +1,5 @@
-// // ** React Imports
 // import { createContext, useEffect, useState } from "react";
 
-// // ** Next Import
-// // import { useRouter } from "next/router";
-
-// import jwt_decode from "jwt-decode";
-// import * as React from "react";
-
-
-// // ** Defaults
 // const defaultProvider = {
 //   user: null,
 //   setUser: () => null,
@@ -18,8 +9,12 @@
 
 // const AuthContext = createContext(defaultProvider);
 
-// const AuthProvider = ({ children : any }) => {
-//   // ** States
+// interface AuthProviderProps {
+//     children: React.ReactNode
+// }
+
+// const AuthProvider = ({ children } : AuthProviderProps) => {
+
 //   const [user, setUser] = useState(defaultProvider.user);
 
 //   // ** Hooks
@@ -27,7 +22,6 @@
 
 //   const [open, setOpen] = useState(false);
 
-//   //Function checking Token every time using
 //   const initAuth = () => {
 //     const storedToken = window.localStorage.getItem("userToken") || null;
 
@@ -37,20 +31,14 @@
 //       const decoded : string = jwt_decode(getToken);
 //       setUser(decoded);
 //       localStorage.setItem("userData", JSON.stringify(decoded));
-//       console.log(decoded);
-
-
-//     } else {
 //     }
 //   };
 
-//   //Checking first time for logging in
 //   useEffect(() => {
 //     initAuth();
 //   }, []);
 
-//   //function for login
-//   //This part will set user data in local storage
+
 //   const handleLogin = (params, errorCallback) => {
 //     const { email, password } = params;
 //     console.log(email);
