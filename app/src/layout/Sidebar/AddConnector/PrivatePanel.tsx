@@ -1,19 +1,20 @@
 import { useState } from "react";
 import ConnectorCard from "./ConnectorCard";
 import { User } from "../../../models/user";
+import { getProfile } from "../../../services/connector-service";
 
 function PrivatePanel() {
-
     const [isSearchFound, setIsSearchFound] = useState(false);
+    const [foundProfile, setFoundProfile] = useState<User | null>(null);
 
     const search = () => {
         setIsSearchFound(true);
+        getProfile("saksit").then(setFoundProfile);
     };
 
     const addConnector = (user: User) => {
         console.log(user);
-        
-    }
+    };
 
     return (
         <>
@@ -33,8 +34,8 @@ function PrivatePanel() {
                     </button>
                 </div>
             </div>
-            {isSearchFound && (
-                <ConnectorCard info={{_id: '123', avatar: '', displayName: 'Saksit Sirisakda'}} addAction={addConnector} />
+            {isSearchFound && !!foundProfile && (
+                <ConnectorCard info={foundProfile} addAction={addConnector} />
             )}
         </>
     );

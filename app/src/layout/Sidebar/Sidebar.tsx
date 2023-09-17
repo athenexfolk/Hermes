@@ -8,12 +8,21 @@ import OwnerPanel from "./OwnerPanel/OwnerPanel";
 import AddConnector from "./AddConnector/AddConnector";
 import { useLoaderData } from "react-router-dom";
 import { ChatContact } from "../../models/chat-contact";
+import { ChatType } from "../../models/chat";
 
 function Sidebar() {
     const [isMainSettingsOpen, setIsMainSettingsOpen] = useState(false);
     const loadedChats = useLoaderData() as ChatContact[];
 
-    const [chats, setChats] = useState(loadedChats)
+    const [chats, setChats] = useState(loadedChats);
+
+    const filterChat = (filter: ChatType | null) => {
+        setChats(
+            filter !== null
+                ? loadedChats.filter((chat) => chat.type === filter)
+                : loadedChats
+        );
+    };
 
     const openMainSettings = () => {
         setIsMainSettingsOpen(!isMainSettingsOpen);
@@ -33,7 +42,7 @@ function Sidebar() {
                     <div className="mb-3">
                         <SearchBar />
                     </div>
-                    <ConnectorFilter />
+                    <ConnectorFilter filterEmitter={filterChat} />
                 </div>
                 <div
                     className="overflow-y-auto"
@@ -42,7 +51,10 @@ function Sidebar() {
                     <ChatContactList chats={chats} />
                 </div>
             </div>
-            <MainSettings openStatus={isMainSettingsOpen} emitCloseEvent={closeMainSettings} />
+            <MainSettings
+                openStatus={isMainSettingsOpen}
+                emitCloseEvent={closeMainSettings}
+            />
             <OwnerPanel emitOpenEvent={openMainSettings} />
         </div>
     );

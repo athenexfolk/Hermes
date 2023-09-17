@@ -4,7 +4,6 @@ const UserDao = require("../../dao/user.dao");
 async function patchAvatarEndpoint(req, res){
     await patchAvatar(req.sub,req.body).then(data=>{
         res.status(HTTP_STATUS.NO_CONTENT).send();
-        res.json(data)
     }).catch(e=>{
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             error: e.message

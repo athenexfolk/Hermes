@@ -1,4 +1,7 @@
+import { getProfile } from "../services/connector-service";
+
 function Plain() {
+    getProfile('saksit')
     return (
         <div className="grow h-screen flex flex-col justify-center items-center relative bg-gray-50">
             <img
