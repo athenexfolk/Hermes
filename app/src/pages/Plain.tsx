@@ -1,7 +1,7 @@
-import { login } from "../services/auth-service";
+import { getProfile } from "../services/connector-service";
 
 function Plain() {
-    login('saksit','1234');
+    getProfile('saksit')
     return (
         <div className="grow h-screen flex flex-col justify-center items-center relative bg-gray-50">
             <img
