@@ -2,8 +2,12 @@ import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import logo from "../../public/logo/logo-900.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/auth-service";
+import { ErrorResponse } from "../models/response";
 function LoginPage() {
+    const navigate = useNavigate();
+
     type Person = {
         username: string;
         password: string;
@@ -33,7 +37,17 @@ function LoginPage() {
 
     const onSubmit = (data: Person) => {
         console.log(data);
-        // const { username, password } = data
+        const { username, password } = data;
+        login(username, password)
+            .then(() => {
+                console.log("success");
+                navigate("/");
+            })
+            .catch((e: ErrorResponse) => {
+                // TODO: ECHO ERROR TO FRONT OF PAGE
+                console.log(e.msg);
+                console.log(e.error);
+            });
         // auth.login({ email, password}, () => {
         //   setError('email', {
         //     type: 'manual',

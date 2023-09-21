@@ -13,7 +13,9 @@ function ConnectorCard({info, addAction}: ConnectorCardProps) {
 
     return (
         <div className="p-4 flex items-center gap-4 border border-gray-100 rounded-lg">
-            <div className="w-16 h-16 bg-gray-100 rounded-full object-cover overflow-hidden shrink-0 grow-0"></div>
+            <div className="w-16 h-16 bg-gray-100 rounded-full object-cover overflow-hidden shrink-0 grow-0 relative">
+                <img src={info.avatar} className="w-full"></img>
+            </div>
             <div className="grow">{info.displayName}</div>
             <button
                 onClick={action}
