@@ -1,5 +1,6 @@
 const HTTP_STATUS = require("../../core/value-object")
 const ChatDao = require("../../dao/chat.dao")
+const UserDao = require("../../dao/user.dao")
 
 /**
  * @typedef {object} ContactData
@@ -20,39 +21,52 @@ const contactEndpoint = async (req, res) => {
             msg: "Check your token"
         })
     }
-    /** @type {ContactData[]} */
-    const contacts = await loadContactFromId(id);
-    if (!contacts) {
-        res.status(HTTP_STATUS.OK).json({
-            error: "No have contact",
-            msg: "You can add your freinds"
-        })
-    } else {
-        res.status(HTTP_STATUS.FOUND).json(contacts.map(c => {
-            return {
-                chatID: c._id,
-                type: c.type,
-                chatName: c.chatName || null,
-                image: c.image,
-                color: c.color,
-                joinedTime: new Date(c.members[0].joinedTime)
-            }
-        }))
-    }
+
+    await loadContactFromId(id)
+        .then(mapModel)
+        .then(LoadLastMessage)
+        .then(i => res.json(i))
+        .catch(i => res.status(HTTP_STATUS.NOT_FOUND).json(i));
+}
+
+function LoadLastMessage(contacts){
+    return contacts.map(i=>{
+        return{
+            ...i,
+            lastMassage : "Not Implemented"
+        }
+    });
+}
+
+async function mapModel(data) {
+    return data.contacts.map(c => {
+        return {
+            chatID: c._id,
+            type: c.type,
+            chatName: c.chatName ?? c.members.find(i => i._id != data.sub)._id,
+            image: c.image,
+            color: c.color
+        }
+    })
 }
 
 
-
 /**
- *
  * @param {string} id
  * @returns {Promise}
  */
 async function loadContactFromId(id) {
-    const contacts = await ChatDao.find()
-        .where('members._id').eq(id)
-    if (contacts.length <= 0) return false
-    return contacts
+    return await ChatDao.find().where('members._id').eq(id).then(contacts => {
+        if (contacts.length <= 0)
+            throw {
+                error: "Value is null",
+                msg: "Check your token"
+            };
+        return {
+            sub: id,
+            contacts
+        };
+    });
 }
 
 
