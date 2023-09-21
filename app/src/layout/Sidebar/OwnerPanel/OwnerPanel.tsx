@@ -1,21 +1,29 @@
-import { mockMe } from "../../../mockData";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 
 interface OwnerPanelProps {
     emitOpenEvent: () => void;
 }
 
 function OwnerPanel({ emitOpenEvent }: OwnerPanelProps) {
+
+    const myContext = useContext(AuthContext);
+
     const openMainSettings = () => {
         emitOpenEvent();
     };
 
-    const myInfo = mockMe;
+    const myInfo = myContext.user;
+    console.log(myInfo);
+
 
     return (
         <div className="px-6 py-3 flex justify-between items-center gap-4">
             <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                <p className="font-bold">{myInfo.displayName}</p>
+                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                    <img src={myInfo?.avatar} className="object-cover" />
+                </div>
+                <p className="font-bold">{myInfo?.displayName}</p>
             </div>
             <button
                 onClick={openMainSettings}

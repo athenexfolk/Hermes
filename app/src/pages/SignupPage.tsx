@@ -1,14 +1,21 @@
-import logo from "./../../public/logo/logo-900.svg";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../services/auth-service";
 
 function SignupPage() {
+    const [loginStatus] = useState(!!isLoggedIn());
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (loginStatus) navigate("/");
+    }, [loginStatus, navigate]);
     return (
         <div className="h-screen flex justify-center items-center relative">
             <div className="h-screen w-screen overlay-background absolute top-0 left-0 -z-10"></div>
 
             <div className="bg-white/90 px-16 py-10 rounded-lg shadow flex flex-col">
                 <div className="flex flex-col justify-center items-center gap-2 mb-8">
-                    <img src={logo} className="w-16 h-16"></img>
+                    <img src={"logo/logo-900.svg"} className="w-16 h-16"></img>
                     <div className="font-bold text-xl">HermesCS</div>
                 </div>
 

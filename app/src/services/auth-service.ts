@@ -25,6 +25,6 @@ export async function logout() {
 }
 
 export function isLoggedIn() {
-    return getItemFromLocalStorage<LoginSuccessResponse>(TOKEN_KEY)
+    return getItemFromLocalStorage<LoginSuccessResponse>(TOKEN_KEY);
 }
 

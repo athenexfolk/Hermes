@@ -1,4 +1,7 @@
-import { mockMe } from "../../../mockData";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../services/auth-service";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 
 interface MainSettingsProps {
     openStatus: boolean;
@@ -6,8 +9,17 @@ interface MainSettingsProps {
 }
 
 function MainSettings({ openStatus, emitCloseEvent }: MainSettingsProps) {
+
+    const myContext = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const myInfo = myContext.user;
     const closeMainSettings = () => {
         emitCloseEvent();
+    };
+
+    const handleLogout = () => {
+        logout().then(() => navigate("/login"));
     };
 
     return (
@@ -26,9 +38,11 @@ function MainSettings({ openStatus, emitCloseEvent }: MainSettingsProps) {
                     {XMarkIcon()}
                 </button>
                 <div className="flex flex-col gap-4 justify-center items-center">
-                    <div className="w-24 h-24 bg-gray-200 rounded-full self-center"></div>
-                    <p className="text-2xl font-bold">{mockMe.displayName}</p>
-                    <p className="text-xs text-gray-500">{mockMe._id}</p>
+                    <div className="w-24 h-24 bg-gray-200 rounded-full self-center overflow-hidden">
+                        <img src={myInfo?.avatar}/>
+                    </div>
+                    <p className="text-2xl font-bold">{myInfo?.displayName}</p>
+                    <p className="text-xs text-gray-500">{myInfo?._id}</p>
                 </div>
                 <button className="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100">
                     <span className="p-2 bg-gray-200 rounded-lg">
@@ -36,7 +50,10 @@ function MainSettings({ openStatus, emitCloseEvent }: MainSettingsProps) {
                     </span>
                     Change name
                 </button>
-                <button className="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100">
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100"
+                >
                     <span className="p-2 bg-gray-200 rounded-lg">
                         {LogoutIcon()}
                     </span>
