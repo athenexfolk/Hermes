@@ -43,8 +43,18 @@ export class DebugServiceComponent implements OnInit {
     this.auth.logout();
   }
 
+  register(){
+    this.auth.register({
+      id: `anirut${Math.floor(Math.random() *1000)}`,
+      avatar: "",
+      displayname:"hi",
+      password: "1234",
+    }).subscribe();
+
+  }
+
   print = (data: any) => {
-    console.debug(data);
+    console.info(data);
     this.line.push(data);
   }
 
