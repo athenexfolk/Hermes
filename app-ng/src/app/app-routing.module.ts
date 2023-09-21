@@ -4,7 +4,7 @@ import { DebugServiceComponent } from './dev/debug-service/debug-service.compone
 import { authGuard } from './guard/auth.guard';
 
 const routes: Routes = [
-  { path: 'debug', component: DebugServiceComponent, canActivate: [authGuard]},
+  { path: 'debug', component: DebugServiceComponent, canActivate: [authGuard] },
   {
     path: '',
     loadChildren: () =>
@@ -12,9 +12,9 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
-  }
-
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
 ];
 
 @NgModule({
