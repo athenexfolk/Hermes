@@ -1,0 +1,36 @@
+<div class="h-screen flex justify-center items-center relative">
+  <div
+    class="h-screen w-screen overlay-background absolute top-0 left-0 -z-10"
+  ></div>
+  <form noValidate autoComplete="off" onSubmit="{handleSubmit(onSubmit)}">
+    <div class="bg-white/90 px-16 py-10 rounded-lg shadow flex flex-col">
+      <div class="flex flex-col justify-center items-center gap-2 mb-8">
+        <img src="assets/logo/logo-900.svg" class="w-16 h-16" />
+        <div class="font-bold text-xl">HermesCS</div>
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          class="px-4 py-2 rounded-lg border"
+          placeholder="Username"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="password"
+          class="px-4 py-2 rounded-lg border"
+          placeholder="Password"
+        />
+      </div>
+      <div class="my-6 relative">
+        <button
+          type="submit"
+          class="w-full px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold"
+        >
+          Login
+        </button>
+      </div>
+      <button routerLink="/auth/register" class="tex-sm">Sign up</button>
+    </div>
+  </form>
+</div>
