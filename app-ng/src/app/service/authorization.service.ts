@@ -49,7 +49,7 @@ export class AuthorizationService {
     this.tokenBehavior.next(undefined);
   }
 
-  get localToken() {
+  private get localToken() {
     const rawtoken = localStorage.getItem(this.tokenKey);
     if (rawtoken)
     try{
@@ -61,7 +61,7 @@ export class AuthorizationService {
     return undefined;
   }
 
-  set localToken(token:Token|undefined){
+  private set localToken(token:Token|undefined){
     if (token === undefined){
       localStorage.removeItem(this.tokenKey);
     }else{
