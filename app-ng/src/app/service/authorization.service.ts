@@ -31,8 +31,12 @@ export class AuthorizationService {
   constructor(
     private http: HttpClient
   ) {
-    // update local token
-    this.tokenBehavior.pipe(tap(token=>this.localToken=token),tap(console.log)).subscribe();
+    this.tokenBehavior.pipe(
+      // update local token
+      tap(token => this.localToken = token),
+      // show logedin status
+      tap(i=> console.debug(`Logedin status is ${i != undefined ? "Logedin" : "Not logged in"}`))
+    ).subscribe();
   }
 
   login(username: string, password: string) {
@@ -41,30 +45,32 @@ export class AuthorizationService {
       .set("password", password);
 
     return this.http.get<Token>(this.loginUrl.toString(), { params }).pipe(
-      tap(token=>this.tokenBehavior.next(token))
+      tap(token => this.tokenBehavior.next(token)),
+      tap(i => console.debug("login success"))
     );
   }
 
-  logout(){
+  logout() {
     this.tokenBehavior.next(undefined);
+    console.debug("logout success");
   }
 
   private get localToken() {
     const rawtoken = localStorage.getItem(this.tokenKey);
     if (rawtoken)
-    try{
-      return JSON.parse(rawtoken) as Token;
-    } catch{
-      this.tokenBehavior.next(undefined);
-      return undefined;
-    }
+      try {
+        return JSON.parse(rawtoken) as Token;
+      } catch {
+        this.tokenBehavior.next(undefined);
+        return undefined;
+      }
     return undefined;
   }
 
-  private set localToken(token:Token|undefined){
-    if (token === undefined){
+  private set localToken(token: Token | undefined) {
+    if (token === undefined) {
       localStorage.removeItem(this.tokenKey);
-    }else{
+    } else {
       const strtoken = JSON.stringify(token);
       localStorage.setItem(this.tokenKey, strtoken);
     }

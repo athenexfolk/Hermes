@@ -18,9 +18,12 @@ export class DebugServiceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.login();
-    this.auth.isLogedIn$.subscribe(i=>this.isLogin=i);
-    setInterval(()=>{
+    // update isLogin
+    this.auth.isLogedIn$
+      .subscribe(i => this.isLogin = i);
+
+    // update time
+    setInterval(() => {
       this.time = Date.now();
     }, 1000)
   }
@@ -28,19 +31,20 @@ export class DebugServiceComponent implements OnInit {
   login() {
     const user = "anirut";
     const password = "1234";
+
     this.auth.login(user, password).pipe(
       tap(this.print)
     ).subscribe({
       error: err => this.print(err.error)
     });
+  }
 
-    setTimeout(() => {
-      // this.auth.logout();
-    }, 5000);
+  logout(){
+    this.auth.logout();
   }
 
   print = (data: any) => {
-    console.log(data);
+    console.debug(data);
     this.line.push(data);
   }
 
