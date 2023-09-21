@@ -27,7 +27,7 @@ const loginEndpoint = async (req, res) => {
         } else {
             res.json({
                 tokenType: "Berer",
-                acessToken: token.accessToken,
+                accessToken: token.accessToken,
                 refreshToken: token.refreshToken,
                 expirein: "Not implement."
             });

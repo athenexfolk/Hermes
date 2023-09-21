@@ -4,11 +4,21 @@ import { DebugServiceComponent } from './dev/debug-service/debug-service.compone
 import { authGuard } from './guard/auth.guard';
 
 const routes: Routes = [
-  { path: 'debug', component: DebugServiceComponent, canActivate: [authGuard]}
+  { path: 'debug', component: DebugServiceComponent, canActivate: [authGuard]},
+  {
+    path: '',
+    loadChildren: () =>
+      import('./features/chat/chat.module').then((m) => m.ChatModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+  }
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
