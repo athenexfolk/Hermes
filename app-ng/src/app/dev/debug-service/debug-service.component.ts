@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { AuthorizationService } from 'src/app/service/authorization.service';
+import { ChatPortalService } from 'src/app/service/chat-portal.service';
 import { ChatService } from 'src/app/service/chat.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class DebugServiceComponent implements OnInit {
 
   constructor(
     private auth: AuthorizationService,
-    private chat: ChatService
+    private chat: ChatService,
+    private chat_portal: ChatPortalService
   ) { }
 
   ngOnInit(): void {
