@@ -15,6 +15,9 @@ export class MainSettingsComponent {
   @Input() openStatus = false;
   @Output() onCloseMainSettings = new EventEmitter();
 
+  isChangeDisplayNamePanelOpen = false;
+  newName = ''
+
   constructor(
     private router: Router,
     private authService: AuthorizationService,
@@ -22,11 +25,26 @@ export class MainSettingsComponent {
   ) {}
 
   ngOnInit() {
-    this.profileService.getMyProfile().subscribe((res) => (this.myInfo = res));
+    this.profileService.myProfile$.subscribe((res) => (this.myInfo = res));
   }
 
   closeMainSettings() {
     this.onCloseMainSettings.emit();
+  }
+
+  openChangeDisplayNamePanel() {
+    this.isChangeDisplayNamePanelOpen = true;
+  }
+
+  closeChangeDisplayNamePanel() {
+    this.isChangeDisplayNamePanelOpen = false;
+  }
+
+  changeDisplayName() {
+    this.profileService.changeDisplayName(this.newName).subscribe(() => {
+      this.isChangeDisplayNamePanelOpen = false;
+      this.myInfo.displayName = this.newName;
+    });
   }
 
   logout() {

@@ -8,4 +8,5 @@ import { ChatContact } from 'src/app/models/chat-contact';
 })
 export class ChatContactComponent {
   @Input() data!: ChatContact
+
 }

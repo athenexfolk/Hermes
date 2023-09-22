@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, tap } from 'rxjs';
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { Token } from './model/token';
 import { RegisterRequestDto } from './model/registerRequestDto';
@@ -33,6 +33,20 @@ export class AuthorizationService {
     return this.tokenBehavior.asObservable().pipe(map((token) => !!token));
   }
 
+  get myId() {
+    return JSON.parse( atob(this.token?.accessToken!.split('.')[1]!))?.id as string;
+  }
+
+  get myId$() {
+    return this.token$.pipe(
+      filter((token) => !!token),
+      map((token) => token?.accessToken),
+      map((actk) => actk?.split('.')[1]),
+      filter((dec) => !!dec),
+      map((dec) => JSON.parse(atob(dec!))?.id)
+    );
+  }
+
   constructor(private http: HttpClient) {
     this.tokenBehavior = new BehaviorSubject<Token | null>(this.localToken);
     this.tokenBehavior
@@ -54,7 +68,6 @@ export class AuthorizationService {
 
     return this.http.get<Token>(this.loginUrl.toString(), { params }).pipe(
       tap((token) => this.tokenBehavior.next(token)),
-      tap(console.log),
       tap((i) => console.debug('login success'))
     );
   }
@@ -75,7 +88,7 @@ export class AuthorizationService {
 
   private get localToken() {
     const rawtoken = localStorage.getItem(this.tokenKey);
-    if (rawtoken) {
+    if (!!rawtoken) {
       let token = JSON.parse(rawtoken) as Token;
       // this.tokenBehavior.next(token);
       return token;
@@ -86,6 +99,7 @@ export class AuthorizationService {
   private set localToken(token: Token | null) {
     if (!token) {
       localStorage.removeItem(this.tokenKey);
+      // this.tokenBehavior.next(null);
     } else {
       const strToken = JSON.stringify(token);
       localStorage.setItem(this.tokenKey, strToken);

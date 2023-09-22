@@ -1,8 +1,8 @@
 <div class="p-4 flex items-center gap-4 border border-gray-100 rounded-lg">
   <div
-    class="w-16 h-16 bg-gray-100 rounded-full object-cover overflow-hidden shrink-0 grow-0 relative"
+    class="w-16 h-16 bg-gray-100 rounded-full overflow-hidden shrink-0 grow-0 relative"
   >
-    <img [src]="info.avatar" class="w-full" />
+    <img [src]="info.avatar" class="w-full h-full object-cover" />
   </div>
   <div class="grow">{{ info.displayName }}</div>
   <button

@@ -18,6 +18,6 @@ export class OwnerPanelComponent {
   }
 
   ngOnInit() {
-    this.profileService.getMyProfile().subscribe((res) => (this.myInfo = res));
+    this.profileService.myProfile$.subscribe((res) => (this.myInfo = res));
   }
 }

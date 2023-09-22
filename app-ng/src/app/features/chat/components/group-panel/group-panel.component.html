@@ -1,4 +1,44 @@
 <div class="flex flex-col gap-2 mb-4">
+  <div class="w-32 h-32 mx-auto flex justify-center items-center mb-4 relative">
+    <input
+      class="hidden"
+      type="file"
+      (change)="onFileUpload($event)"
+      accept="image/*"
+      #selectFile
+    />
+
+    <div
+      *ngIf="imageStr.length"
+      class="w-32 h-32 flex justify-center items-center"
+    >
+      <img [src]="imageStr" class="w-full h-full rounded-full object-cover" />
+    </div>
+    <div
+      class="absolute top-0 left-0 w-32 h-32 rounded-full overflow-hidden transition-all hover:backdrop-blur-sm hover:bg-gray-200/75 cursor-pointer"
+      [ngClass]="imageStr.length ? 'bg-transparent' : 'bg-gray-50'"
+    >
+      <div
+        (click)="selectFile.click()"
+        class="w-32 h-32 flex justify-center items-center transition-all opacity-0 hover:opacity-100 text-gray-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
   <div class="bg-gray-50 rounded-lg flex gap-2 p-1">
     <input
       type="text"
@@ -44,17 +84,56 @@
 
 <ng-template #notFound><p>User not found</p></ng-template>
 <div class="flex flex-col gap-4 mt-4">
-  <ul class="flex flex-wrap -space-x-4">
-    <li *ngFor="let user of groupUsers">
-      <div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white"></div>
+  <ul class="flex flex-wrap -space-x-4 group-[main]: hover:space-x-4">
+    <li
+      *ngFor="let user of groupUsers; let i = index"
+      class="w-8 h-8 group-hover-[main]:w-16 min-w-0 transition-all"
+    >
+      <div
+        class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white relative group"
+      >
+        <img
+          class="w-full h-full object-cover rounded-full"
+          [src]="user.avatar"
+        />
+        <ng-container *ngIf="user._id !== myId">
+          <div
+            (click)="removeConnectorFromGroup(i)"
+            class="w-full h-full rounded-full bg-red-500/75 text-white absolute top-0 left-0 flex justify-center items-center invisible opacity-0 group-hover:visible group-hover:opacity-100 cursor-pointer transition-all"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+        </ng-container>
+        <div
+          class="absolute px-3 py-1.5 text-sm flex justify-center items-center -bottom-10 z-10 bg-white text-gray-500 shadow rounded-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all"
+        >
+          {{ user.displayName }}
+        </div>
+      </div>
     </li>
   </ul>
   <button
+    (click)="addGroupChat()"
     class="px-4 py-2 rounded-lg font-semibold text-white"
     [ngClass]="
-      groupUsers.length < 3 ? 'bg-gray-300 cursor-not-allowed' : 'bg-green-500'
+      groupUsers.length < 3 || !groupName.length
+        ? 'bg-gray-300 cursor-not-allowed'
+        : 'bg-green-500'
     "
-    [disabled]="groupUsers.length < 3"
+    [disabled]="groupUsers.length < 3 || !groupName.length"
   >
     Create group
   </button>
