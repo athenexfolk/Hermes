@@ -40,7 +40,7 @@ function onConnection(socket) {
 
 function addOnMessageHandler(socket) {
     socket.on("message:send", async context => {
-        if(!context.chatContent || !context.chatID)
+        if(!context.chatContent || !context.chatId)
             return saveMessageErrorHandeler(socket)(new Error("Couldn't send message [invalid chat id or empty message]"));
         const message = {
             senderID: socket.sub,
@@ -77,7 +77,7 @@ function saveMessageToDb(context) {
     return new Promise(async (resolve, reject) => {
         const chatmembers = (await ChatDao.findOne(
             { _id: context.chatID },
-            { "members.id": 1, "_id": 0 })
+            { "members._id": 1, "_id": 0 })
         ).members.map(m => m.id);
 
         if (chatmembers.indexOf(context.senderID) < 0)
