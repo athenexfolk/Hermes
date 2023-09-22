@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { filter } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { AuthorizationService } from 'src/app/service/authorization.service';
+import { ChatService } from 'src/app/service/chat.service';
 import { ProfileService } from 'src/app/service/profile.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class GroupPanelComponent {
 
   constructor(
     private profileService: ProfileService,
-    private authService: AuthorizationService
+    private authService: AuthorizationService,
+    private chatService: ChatService
   ) {
     this.profileService
       .getMyProfile()
@@ -58,7 +60,16 @@ export class GroupPanelComponent {
   }
 
   addGroupChat() {
-
+    console.debug("addGroupChat");
+    this.chatService.addChat({
+      to: this.groupUsers.map(i=>i._id),
+      type:"group",
+      chatName: this.groupName,
+      image: this.imageStr
+    }).subscribe({
+      next: this.onAddConnectorSeccess,
+      error: this.onAddConnectorFalse
+    })
   }
 
   onFileUpload(e: Event) {
@@ -73,4 +84,7 @@ export class GroupPanelComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  private onAddConnectorSeccess = () => { console.log("Add success"); }
+  private onAddConnectorFalse = (e:unknown) => { console.log("Add False : ",e) }
 }

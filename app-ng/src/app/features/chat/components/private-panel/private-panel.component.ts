@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { filter } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { AuthorizationService } from 'src/app/service/authorization.service';
+import { ChatService } from 'src/app/service/chat.service';
 import { ProfileService } from 'src/app/service/profile.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class PrivatePanelComponent {
 
   constructor(
     private profileService: ProfileService,
-    private authService: AuthorizationService
+    private authService: AuthorizationService,
+    private chatService: ChatService
   ) {
     this.myId = this.authService.myId;
   }
@@ -41,6 +43,16 @@ export class PrivatePanelComponent {
   }
 
   addConnector(user: User) {
-    
+    console.debug(" Add chat connector");
+    this.chatService.addChat({
+      to:[user._id],
+      type:"private"
+    }).subscribe({
+      next:this.onAddConnectorSeccess,
+      error:this.onAddConnectorFalse
+    });
   }
+
+  private onAddConnectorSeccess = () => { console.log("Add success"); }
+  private onAddConnectorFalse = (e:unknown) => { console.log("Add False : ",e) }
 }
