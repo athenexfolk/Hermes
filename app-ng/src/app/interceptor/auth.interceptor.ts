@@ -3,18 +3,39 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpHeaders
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { enviroment } from 'src/enviroment/enviroment.dev';
+import { AuthorizationService } from '../service/authorization.service';
+
+const EXCLUDE: { mehtod: string, endpoint: string }[] = [
+  { mehtod: "GET", endpoint: `${enviroment.API_SERVER_URL}/account/login` },
+  { mehtod: "POST", endpoint: `${enviroment.API_SERVER_URL}/account/register` }
+]
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(
+    private auth: AuthorizationService
+  ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log("helll intercept request");
+    console.debug("############## auth intercept ##############");
+    const isExcluded = !!EXCLUDE.find(i=>i.mehtod==request.method && i.endpoint==request.url);
+    const token = this.auth.token;
 
-    return next.handle(request);
+    if (isExcluded || token == undefined)
+      return next.handle(request);
+
+    const newReq = request.clone({
+      headers: new HttpHeaders({
+        "Authorization": `${token.tokenType} ${token.accessToken}`
+      })
+    });
+
+    return next.handle(newReq);
   }
 }

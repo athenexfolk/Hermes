@@ -1,8 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, tap } from 'rxjs';
 import { enviroment } from 'src/enviroment/enviroment.dev';
+import { Token } from './model/token';
+import { RegisterRequestDto } from './model/registerRequestDto';
+import { RegisterResponseDto } from './model/registerResponseDto';
+import { Response } from './model/response';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +23,9 @@ export class AuthorizationService {
   get token$() {
     return this.tokenBehavior.asObservable();
   }
+  get token() {
+    return this.tokenBehavior.getValue();
+  }
   get isLogedIn$() {
     return this.tokenBehavior.asObservable()
       .pipe(map(token => token != undefined));
@@ -35,7 +41,7 @@ export class AuthorizationService {
       // update local token
       tap(token => this.localToken = token),
       // show logedin status
-      tap(i=> console.debug(`Logedin status is ${i != undefined ? "Logedin" : "Not logged in"}`))
+      tap(i => console.debug(`Logedin status is ${i != undefined ? "Logedin" : "Not logged in"}`))
     ).subscribe();
   }
 
@@ -53,6 +59,16 @@ export class AuthorizationService {
   logout() {
     this.tokenBehavior.next(undefined);
     console.debug("logout success");
+  }
+
+  register(data: RegisterRequestDto) {
+    return this.http.post<Response<RegisterResponseDto>>(
+      this.regUrl.toString(),
+      data
+    ).pipe(
+      tap(res=> console.debug(res.msg)),
+      map(res=>res.data!),
+    );
   }
 
   private get localToken() {

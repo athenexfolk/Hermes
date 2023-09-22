@@ -1,6 +1,6 @@
-export interface token{
+export interface Token{
     tokenType:string
-    acessToken: string
+    accessToken: string
     refreshToken: string
     expirein: string
 }

@@ -3,9 +3,15 @@
 <span>{{time | date:'mm:ss'}}</span>
 <hr>
 
+<button (click)="register()" class="px-4 py-2 rounded-lg border bg-teal-200">register</button>
 <button (click)="login()" class="px-4 py-2 rounded-lg border bg-teal-200">login</button>
 <button (click)="logout()" class="px-4 py-2 rounded-lg border bg-indigo-500">logout</button>
-<p>debug-service works!</p>
+<hr>
+
+<br>
+<button (click)="getchats()" class="px-4 py-2 rounded-lg border bg-teal-200">get chats</button>
+<button (click)="getchat()" class="px-4 py-2 rounded-lg border bg-teal-200">get one chat</button>
+<button (click)="addChat()" class="px-4 py-2 rounded-lg border bg-teal-200">Add chat</button>
 
 <div *ngFor="let i of line">
   <div>{{i | json}}</div>
