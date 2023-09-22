@@ -4,6 +4,7 @@ import { map, switchMap, tap } from 'rxjs';
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { ChatDto } from './model/chatDto';
 import { AddChatRequestDto } from './model/addChatRequestDto';
+import { MessageDto } from './model/messageDto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class ChatService {
    */
   getMessages(id: string) {
     const chatUrl = new URL(`/chats/${id}`, this.baseUrl);
-    return this.http.get<ChatDto[]>(chatUrl.toString()).pipe(
+    return this.http.get<MessageDto[]>(chatUrl.toString()).pipe(
       tap(i=>console.debug(`Loading chat ${id} : ${i.length} messages`)),
     );
   }
