@@ -22,6 +22,7 @@ import { MessageComponent } from './components/message/message.component';
 import { ChatSettingsComponent } from './components/chat-settings/chat-settings.component';
 import { PrivatePanelComponent } from './components/private-panel/private-panel.component';
 import { GroupPanelComponent } from './components/group-panel/group-panel.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -49,7 +50,9 @@ import { GroupPanelComponent } from './components/group-panel/group-panel.compon
   ],
   imports: [
     CommonModule,
-    ChatRoutingModule
+    ChatRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ChatModule { }

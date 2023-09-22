@@ -1,15 +1,12 @@
 <div class="flex flex-col gap-2 mb-4">
-  <label>Connector Username</label>
   <div class="bg-gray-50 rounded-lg flex gap-2 p-1">
     <input
       type="text"
       class="grow bg-transparent focus:ring-transparent px-4 py-2"
       placeholder="Username"
+      [(ngModel)]="username"
     />
-    <button
-      (click)="search()"
-      class="p-2 text-gray-400 hover:text-gray-700"
-    >
+    <button (click)="search()" class="p-2 text-gray-400 hover:text-gray-700">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -27,9 +24,12 @@
     </button>
   </div>
 </div>
-<!-- {isSearchFound && !!foundProfile && (
-                <ConnectorCard info={foundProfile} addAction={addConnector} />
-            )}
-            {
-            isSearchFound === false && (<p>User not found</p>)
-            } -->
+<ng-container *ngIf="isSearched">
+  <ConnectorCard
+  *ngIf="!!foundProfile; else notFound"
+  [info]="foundProfile"
+  (addAction)="addConnector($event)"
+/>
+</ng-container>
+
+<ng-template #notFound><p>User not found</p></ng-template>

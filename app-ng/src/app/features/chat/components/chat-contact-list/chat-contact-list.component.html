@@ -1,5 +1,9 @@
-<ul className="flex flex-col">
+<ul className="flex flex-col" *ngIf="chatContacts.length; else emptyChat">
   <li *ngFor="let chatContact of chatContacts">
     <ChatContact [data]="chatContact" />
   </li>
 </ul>
+
+<ng-template #emptyChat>
+  Your chat is empty
+</ng-template>

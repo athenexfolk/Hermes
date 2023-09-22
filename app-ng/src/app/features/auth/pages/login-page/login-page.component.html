@@ -2,7 +2,7 @@
   <div
     class="h-screen w-screen overlay-background absolute top-0 left-0 -z-10"
   ></div>
-  <form noValidate autoComplete="off" onSubmit="{handleSubmit(onSubmit)}">
+  <form [formGroup]="loginForm" (submit)="login()">
     <div class="bg-white/90 px-16 py-10 rounded-lg shadow flex flex-col">
       <div class="flex flex-col justify-center items-center gap-2 mb-8">
         <img src="assets/logo/logo-900.svg" class="w-16 h-16" />
@@ -11,6 +11,7 @@
       <div class="mb-4">
         <input
           type="text"
+          formControlName="username"
           class="px-4 py-2 rounded-lg border"
           placeholder="Username"
         />
@@ -18,6 +19,7 @@
       <div class="mb-4">
         <input
           type="password"
+          formControlName="password"
           class="px-4 py-2 rounded-lg border"
           placeholder="Password"
         />

@@ -1,4 +1,4 @@
-<div
+<div *ngIf="myInfo"
   class="h-full w-full bg-white top-0 absolute min-h-0 transition-all ease-in-out p-4 duration-500"
   [ngClass]="openStatus ? 'visible left-0' : 'w-0 invisible -left-full'"
 >
@@ -26,10 +26,10 @@
       <div
         class="w-24 h-24 bg-gray-200 rounded-full self-center overflow-hidden"
       >
-        <img [src]="myInfo?.avatar" />
+        <img [src]="myInfo.avatar" />
       </div>
-      <p class="text-2xl font-bold">{{ myInfo?.displayName }}</p>
-      <p class="text-xs text-gray-500">{{ myInfo?._id }}</p>
+      <p class="text-2xl font-bold">{{ myInfo.displayName }}</p>
+      <p class="text-xs text-gray-500">{{ myInfo._id }}</p>
     </div>
     <button
       class="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100"
@@ -50,7 +50,7 @@
       Change name
     </button>
     <button
-      (click)="handleLogout()"
+      (click)="logout()"
       class="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100"
     >
       <span class="p-2 bg-gray-200 rounded-lg">

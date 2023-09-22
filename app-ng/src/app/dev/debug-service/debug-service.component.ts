@@ -21,7 +21,7 @@ export class DebugServiceComponent implements OnInit {
 
   ngOnInit(): void {
     // update isLogin
-    this.auth.isLogedIn$
+    this.auth.isLoggedIn$
       .subscribe(i => this.isLogin = i);
 
     // update time

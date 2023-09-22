@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'PrivatePanel',
@@ -6,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./private-panel.component.scss']
 })
 export class PrivatePanelComponent {
-  search() {}
+  username = ''
+  isSearched = false
+  foundProfile: User | null = null
+
+  search() {
+    this.isSearched = true
+  }
+
+  addConnector(user: User) {
+
+  }
 }

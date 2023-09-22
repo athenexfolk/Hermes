@@ -1,9 +1,9 @@
-<div class="px-6 py-3 flex justify-between items-center gap-4">
+<div *ngIf="myInfo; else loadingProfile" class="px-6 py-3 flex justify-between items-center gap-4">
   <div class="flex items-center gap-4">
     <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-      <img src="{myInfo?.avatar}" class="object-cover" />
+      <img [src]="myInfo.avatar" class="object-cover" />
     </div>
-    <p class="font-bold">{{ myInfo?.displayName }}</p>
+    <p class="font-bold">{{ myInfo.displayName }}</p>
   </div>
   <button
     (click)="openMainSettings()"
@@ -23,3 +23,7 @@
     </svg>
   </button>
 </div>
+
+<ng-template #loadingProfile>
+  loading...
+</ng-template>

@@ -9,13 +9,13 @@
               <SearchBar />
           </div>
           <!-- <ConnectorFilter filterEmitter={filterChat} /> -->
-          <ConnectorFilter />
+          <ConnectorFilter (onChangeFilter)="onChangeFilter($event)" />
       </div>
       <div
           class="overflow-y-auto"
           style="height: calc( 100vh - 256px )"
       >
-          <ChatContactList [chatContacts]="contacts" />
+          <ChatContactList [chatContacts]="filteredChatContacts" />
       </div>
   </div>
   <MainSettings

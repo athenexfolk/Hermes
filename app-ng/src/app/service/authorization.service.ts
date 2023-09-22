@@ -8,88 +8,87 @@ import { RegisterResponseDto } from './model/registerResponseDto';
 import { Response } from './model/response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthorizationService {
-
   private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private loginUrl = new URL("account/login", this.baseUrl);
-  private regUrl = new URL("account/register", this.baseUrl);
+  private loginUrl = new URL('account/login', this.baseUrl);
+  private regUrl = new URL('account/register', this.baseUrl);
 
   private tokenKey = enviroment.TOKEN_KEY;
 
-  private tokenBehavior = new BehaviorSubject<Token | undefined>(this.localToken);
+  private tokenBehavior: BehaviorSubject<Token | null>;
 
-  get token$() {
-    return this.tokenBehavior.asObservable();
-  }
   get token() {
     return this.tokenBehavior.getValue();
   }
-  get isLogedIn$() {
-    return this.tokenBehavior.asObservable()
-      .pipe(map(token => token != undefined));
-  }
-  get isLogedIn() {
-    return this.tokenBehavior.getValue() != undefined;
+  get token$() {
+    return this.tokenBehavior.asObservable();
   }
 
-  constructor(
-    private http: HttpClient
-  ) {
-    this.tokenBehavior.pipe(
-      // update local token
-      tap(token => this.localToken = token),
-      // show logedin status
-      tap(i => console.debug(`Logedin status is ${i != undefined ? "Logedin" : "Not logged in"}`))
-    ).subscribe();
+  get isLoggedIn() {
+    return !!this.tokenBehavior.getValue();
+  }
+  get isLoggedIn$() {
+    return this.tokenBehavior.asObservable().pipe(map((token) => !!token));
+  }
+
+  constructor(private http: HttpClient) {
+    this.tokenBehavior = new BehaviorSubject<Token | null>(this.localToken);
+    this.tokenBehavior
+      .pipe(
+        tap((token) => {
+          this.localToken = token;
+          console.debug(
+            `Login status is ${!!token ? 'Logged in' : 'Not logged in'}`
+          );
+        })
+      )
+      .subscribe();
   }
 
   login(username: string, password: string) {
     const params = new HttpParams()
-      .set("username", username)
-      .set("password", password);
+      .set('username', username)
+      .set('password', password);
 
     return this.http.get<Token>(this.loginUrl.toString(), { params }).pipe(
-      tap(token => this.tokenBehavior.next(token)),
-      tap(i => console.debug("login success"))
+      tap((token) => this.tokenBehavior.next(token)),
+      tap(console.log),
+      tap((i) => console.debug('login success'))
     );
   }
 
   logout() {
-    this.tokenBehavior.next(undefined);
-    console.debug("logout success");
+    this.tokenBehavior.next(null);
+    console.debug('logout success');
   }
 
   register(data: RegisterRequestDto) {
-    return this.http.post<Response<RegisterResponseDto>>(
-      this.regUrl.toString(),
-      data
-    ).pipe(
-      tap(res=> console.debug(res.msg)),
-      map(res=>res.data!),
-    );
+    return this.http
+      .post<Response<RegisterResponseDto>>(this.regUrl.toString(), data)
+      .pipe(
+        tap((res) => console.debug(res.msg)),
+        map((res) => res.data!)
+      );
   }
 
   private get localToken() {
     const rawtoken = localStorage.getItem(this.tokenKey);
-    if (rawtoken)
-      try {
-        return JSON.parse(rawtoken) as Token;
-      } catch {
-        this.tokenBehavior.next(undefined);
-        return undefined;
-      }
-    return undefined;
+    if (rawtoken) {
+      let token = JSON.parse(rawtoken) as Token;
+      // this.tokenBehavior.next(token);
+      return token;
+    }
+    return null;
   }
 
-  private set localToken(token: Token | undefined) {
-    if (token === undefined) {
+  private set localToken(token: Token | null) {
+    if (!token) {
       localStorage.removeItem(this.tokenKey);
     } else {
-      const strtoken = JSON.stringify(token);
-      localStorage.setItem(this.tokenKey, strtoken);
+      const strToken = JSON.stringify(token);
+      localStorage.setItem(this.tokenKey, strToken);
     }
   }
-
 }

@@ -50,13 +50,15 @@
         <ul class="grid grid-cols-2 gap-2 font-semibold">
           <li
             (click)="changeChatType(ChatType.PRIVATE)"
-            class="flex justify-center items-center cursor-pointer border-b-4 px-4 py-2 hover:bg-gray-50"
+            class="flex justify-center items-center cursor-pointer px-4 py-2 rounded-full hover:bg-gray-50"
+            [ngClass]="{'bg-gray-100': chatType === ChatType.PRIVATE}"
           >
             Private
           </li>
           <li
             (click)="changeChatType(ChatType.GROUP)"
-            class="flex justify-center items-center cursor-pointer border-b-4 px-4 py-2 hover:bg-gray-50"
+            class="flex justify-center items-center cursor-pointer px-4 py-2 rounded-full hover:bg-gray-50"
+            [ngClass]="{'bg-gray-100': chatType === ChatType.GROUP}"
           >
             Group
           </li>

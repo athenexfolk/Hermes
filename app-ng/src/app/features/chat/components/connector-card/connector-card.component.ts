@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'ConnectorCard',
@@ -6,6 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./connector-card.component.scss']
 })
 export class ConnectorCardComponent {
-  info: any
-  action() {}
+  @Input() info!: User
+  @Output() addAction = new EventEmitter<User>();
+
+  onAdd() {
+    this.addAction.emit(this.info);
+  }
 }

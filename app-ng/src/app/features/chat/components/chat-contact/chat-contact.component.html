@@ -1,4 +1,4 @@
-<div
+<div *ngIf="data"
   routerLink="/{{ data.chatID }}"
   [routerLinkActive]="['bg-gray-50']"
   [routerLinkActiveOptions]="{exact: true}"
@@ -12,7 +12,7 @@
         <!-- {`${ data.lastMassage.senderID === mockMe._id ? "Me" :
           getUserInfoById(data.lastMassage.senderID) ?.displayName } :
           ${data.lastMassage.content.data}`} -->
-        {{ data.lastMassage.content.data }}
+        <!-- {{ data.lastMassage.content.data }} -->
       </p>
     </div>
   </div>

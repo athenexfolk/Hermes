@@ -1,55 +1,60 @@
 <div class="flex flex-col gap-2 mb-4">
-  <label>Group name</label>
   <div class="bg-gray-50 rounded-lg flex gap-2 p-1">
     <input
       type="text"
       class="grow bg-transparent focus:ring-transparent px-4 py-2"
       placeholder="Group name"
+      [(ngModel)]="groupName"
     />
   </div>
 </div>
 <div class="flex flex-col gap-2 mb-4">
-  <label>Connector Username</label>
   <div class="bg-gray-50 rounded-lg flex gap-2 p-1">
     <input
       type="text"
       class="grow bg-transparent focus:ring-transparent px-4 py-2"
       placeholder="Username"
+      [(ngModel)]="username"
     />
     <button (click)="search()" class="p-2 text-gray-400 hover:text-gray-700">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth="1.5"
+        stroke-width="1.5"
         stroke="currentColor"
-        className="w-6 h-6"
+        class="w-6 h-6"
       >
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          stroke-linecap="round"
+          stroke-linejoin="round"
           d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
         />
       </svg>
     </button>
   </div>
 </div>
-<!-- <ConnectorCard *ngIf="isSearchFound"
-                    info="{ _id: "123", avatar: "", displayName: "Kevin way" }
-                    addAction={addGroupConnector}
-                /> -->
-<ConnectorCard />
+<ng-container *ngIf="isSearched">
+  <ConnectorCard
+    *ngIf="!!foundProfile; else notFound"
+    [info]="foundProfile"
+    (addAction)="addConnectorToGroup($event)"
+  />
+</ng-container>
+
+<ng-template #notFound><p>User not found</p></ng-template>
 <div class="flex flex-col gap-4 mt-4">
   <ul class="flex flex-wrap -space-x-4">
-    <!-- {connectors.map((connector) => (
-                        <li>
-                            <div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white"></div>
-                        </li>
-                    ))} -->
+    <li *ngFor="let user of groupUsers">
+      <div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white"></div>
+    </li>
   </ul>
   <button
     class="px-4 py-2 rounded-lg font-semibold text-white"
-    disabled="connectors.length"
+    [ngClass]="
+      groupUsers.length < 3 ? 'bg-gray-300 cursor-not-allowed' : 'bg-green-500'
+    "
+    [disabled]="groupUsers.length < 3"
   >
     Create group
   </button>
