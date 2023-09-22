@@ -1,9 +1,6 @@
 const { verifyToken } = require('../services/token.service');
 
 const authGuard = async (socket, next) => {
-    console.log(socket.handshake.auth.token);
-    console.log(socket.handshake);
-
     const token = socket.handshake.auth.token
         ?? socket.handshake.headers.Authorization
         ?? socket.handshake.headers.authorization
