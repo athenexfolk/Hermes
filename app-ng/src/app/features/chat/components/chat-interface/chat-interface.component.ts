@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./chat-interface.component.scss']
 })
 export class ChatInterfaceComponent {
+  isChatSettingsOpen = false;
 
+  onToggleChatSettings() {
+    this.isChatSettingsOpen =!this.isChatSettingsOpen;
+  }
 }

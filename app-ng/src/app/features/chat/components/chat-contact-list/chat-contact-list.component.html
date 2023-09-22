@@ -1,7 +1,5 @@
 <ul className="flex flex-col">
-  <!-- {chats.map((connector) => (
-      <li key={connector.chatID}>
-          <ChatContact data={connector} />
-      </li>
-  ))} -->
+  <li *ngFor="let chatContact of chatContacts">
+    <ChatContact [data]="chatContact" />
+  </li>
 </ul>

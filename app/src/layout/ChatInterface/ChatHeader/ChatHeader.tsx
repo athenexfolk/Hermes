@@ -16,7 +16,12 @@ function ChatHeader({ forContact, settings }: ChatHeaderProps) {
     };
 
     return (
-        <nav
+
+    );
+}
+
+export default ChatHeader;
+<nav
             className="px-6 py-3 shadow flex items-center justify-between sticky top-0 z-10"
         >
             <div className="flex gap-3 items-center">
@@ -48,7 +53,3 @@ function ChatHeader({ forContact, settings }: ChatHeaderProps) {
                 </svg>
             </button>
         </nav>
-    );
-}
-
-export default ChatHeader;

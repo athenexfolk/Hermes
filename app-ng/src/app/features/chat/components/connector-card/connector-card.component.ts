@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-connector-card',
+  selector: 'ConnectorCard',
   templateUrl: './connector-card.component.html',
   styleUrls: ['./connector-card.component.scss']
 })

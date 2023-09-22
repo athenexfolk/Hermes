@@ -9,17 +9,18 @@
               <SearchBar />
           </div>
           <!-- <ConnectorFilter filterEmitter={filterChat} /> -->
+          <ConnectorFilter />
       </div>
       <div
           class="overflow-y-auto"
           style="height: calc( 100vh - 256px )"
       >
-          <!-- <ChatContactList chats={chats} /> -->
+          <ChatContactList [chatContacts]="contacts" />
       </div>
   </div>
-  <!-- <MainSettings
-      openStatus={isMainSettingsOpen}
-      emitCloseEvent={closeMainSettings}
+  <MainSettings
+      [openStatus]="isMainSettingsOpen"
+      (onCloseMainSettings)="onCloseMainSettings()"
   />
-  <OwnerPanel emitOpenEvent={openMainSettings} /> -->
+  <OwnerPanel (onOpenMainSettings)="onOpenMainSettings()" />
 </div>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ChatContact } from 'src/app/models/chat-contact';
 
 @Component({
-  selector: 'app-chat-contact-list',
+  selector: 'ChatContactList',
   templateUrl: './chat-contact-list.component.html',
   styleUrls: ['./chat-contact-list.component.scss']
 })
 export class ChatContactListComponent {
-
+  @Input() chatContacts: ChatContact[] = []
 }
