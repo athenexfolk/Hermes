@@ -24,10 +24,19 @@ const contactEndpoint = async (req, res) => {
     }
 
     await loadContactFromDb(id)
-        // .then(console.log)
+        .then(fillterEmptyList)
         .then(mapModel)
         .then(i => res.json(i))
         .catch(i => res.status(HTTP_STATUS.NOT_FOUND).json(i));
+}
+
+async function fillterEmptyList(data){
+    if (Array.isArray(data) && data.length == 0)
+        throw new {
+            error:"Chat not found",
+            msg:""
+        }
+    else return data
 }
 
 async function loadContactFromDb(chatId) {
