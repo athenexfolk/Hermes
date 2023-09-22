@@ -40,7 +40,7 @@ async function getChatHistoryFromRef(refId) {
         .where("sendTime").lt(ref?.sendTime ?? Date.MAX_VALUE)
         .where("sendTime").gt(ref.chat.find(i=>i._id=="saksit")[0]?.joinedTime ?? Date.MIN_VALUE)
         .sort("-sendTime")
-        .limit(2)
+        .limit(10)
     if (messageHistories.length == 0)
         throw new Error("End of message history");
     return messageHistories;
