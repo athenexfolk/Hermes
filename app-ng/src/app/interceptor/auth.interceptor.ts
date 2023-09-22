@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const newReq = request.clone({
       headers: new HttpHeaders({
-        "Authorization": `${token.tokenType} ${token.acessToken}`
+        "Authorization": `${token.tokenType} ${token.accessToken}`
       })
     });
 
