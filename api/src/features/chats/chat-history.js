@@ -8,13 +8,16 @@ Date.MAX_VALUE = new Date(8640000000000000);
 const HISTORY_SIZE = 5;
 
 async function getChatHistory(req, res) {
+    console.assert(!!req.params.ref, "Invalid Ref");
+    console.assert(!!req.sub, "Invalid Sub");
+
     if (!req.params.ref)
         res.status(HTTP_STATUS.BAD_REQUEST).json({
             error: "Invalid reference",
             msg: "Param 'ref' should not be empty. ref can be chat id or message id",
         })
 
-    else getChatHistoryFromRef(req.params.ref).then(h => {
+    else getChatHistoryFromRef(req.params.ref, req.sub).then(h => {
         res.json(h.map(i => {
             return {
                 chatId: i.chatID,
@@ -29,20 +32,19 @@ async function getChatHistory(req, res) {
     });
 }
 
-async function getChatHistoryFromRef(refId) {
+async function getChatHistoryFromRef(refId, sub) {
     const ref = await loadRefFromId(refId);
-    // const joinTime = ref.map(i=>i.chat.find(i=>i._id=="saksit"))[0]?.joinedTime ?? Date.MIN_VALUE;
-
-    console.log(ref);
 
     const messageHistories = await MessageDao.find({})
         .where("chatID").eq(ref?.chatID ?? refId)
         .where("sendTime").lt(ref?.sendTime ?? Date.MAX_VALUE)
-        .where("sendTime").gt(ref.chat.find(i=>i._id=="saksit")[0]?.joinedTime ?? Date.MIN_VALUE)
+        .where("sendTime").gt(ref.members.find(i => i._id==sub)?.joinedTime ?? Date.MIN_VALUE)
         .sort("-sendTime")
         .limit(10)
+
     if (messageHistories.length == 0)
         throw new Error("End of message history");
+
     return messageHistories;
 }
 
@@ -82,13 +84,13 @@ async function loadRefFromId(refID) {
             }, {
                 '$project': {
                     '_id': 0,
-                    'chat': '$result.member',
+                    'members': '$result.member',
                     'sendTime': 1,
                     'chatID': 1
                 }
             }
-        ]).then(i=>{
-            if (i.length == 0 )
+        ]).then(i => {
+            if (i.length == 0)
                 throw { error: "Empty message" };
             else return i[0];
         })
