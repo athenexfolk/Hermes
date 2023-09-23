@@ -9,15 +9,13 @@ const UserDao = require("../../dao/user.dao");
  * @property {string} displayname
  */
 
-function getProfileFromToken(req, res) {
+function getProfileFromToken(req, res, next) {
+    console.assert(!!req.sub, "You must provide u sub");
+
     loadProfile(req.sub)
-    .then(profile=>res.json(profile))
-    .catch(e=>
-        res.status(HTTP_STATUS.NOT_FOUND).json({
-            error: e.message,
-            msg: `User id '${req.sub}' have no profile. You can register a new profile`
-        })
-    );
+        .then(mapModel)
+        .then(profile => res.json(profile))
+        .catch(next);
 }
 
 async function loadProfile(userid) {
@@ -25,18 +23,20 @@ async function loadProfile(userid) {
         { _id: userid },
         { passwordHash: 0, passwordSalt: 0 }
     );
-    return new Promise((resolve, reject) => {
-        if (!!usr) {
-            /** @type {UserResponseDto} */
-            const usrDto = {
-                userid: usr._id,
-                username: usr._id,
-                avatar: usr.avatar,
-                displayname: usr.displayname
-            }
-            resolve(usrDto);
-        }else reject(new Error("Profile not found"));
-    });
+    if (!usr) throw {
+        error:"Profile not found",
+        msg: `User id '${userid}' have no profile. You can register a new profile`
+    }
+    return usr;
+}
+
+async function mapModel(usr) {
+    return {
+        userid: usr._id,
+        username: usr._id,
+        avatar: usr.avatar,
+        displayname: usr.displayname
+    }
 }
 
 
