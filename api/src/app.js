@@ -35,26 +35,6 @@ app.use('/account', authRouter);
 app.use('/profile', profileRouter);
 app.use('/chats', chatRouter);
 
-// GET /tmp to run tmp script for dev
-app.get('/temp', async (req, res) => {
-    const chat_contact = req.body
-    const newchat = new ChatDao(
-        {
-            type: chat_contact.type,
-            members: [
-                { _id: chat_contact.id, joinedTime: Date.now() }
-            ],
-            color: chat_contact.color,
-            image: chat_contact.image
-        }
-    )
-    await newchat.save()
-    res.json({
-        newchat
-    }
-    )
-})
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
