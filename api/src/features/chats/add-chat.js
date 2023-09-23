@@ -20,78 +20,113 @@ const UserDao = require("../../dao/user.dao");
  * @property {any} lastMessage
  */
 
-async function addChatEndpoint(req, res){
-    !req.body.to.includes(req.sub) ? req.body.to.push(req.sub) : null;
-    addChatToDatabase(req.body) .then(data=>{
-        res.json({
-            type: data.type,
-            chatID: data._id,
-            chatName: data.type == "group"
-                ? data.chatName
-                : data.members?.filter(m => m._id != req.sub)[0]._id,
-            image: data.image,
-            color : data.color,
-            lastMessage: [],
-        })
-    }).catch(e=>res.status(HTTP_STATUS.BAD_REQUEST).json({
-        error: e.message
-    }));
+function addChatEndpoint(req, res, next) {
+    !req.body.to?.includes(req.sub) ? req.body.to.push(req.sub) : null;
+
+    validateAddChatData(req)
+        .then(fillterExistPrivateChat)
+        .then(addChatToDatabase)
+        .then(mapModel)
+        .then(data => res.json(data))
+        .catch(next);
 }
 
 /**
  * @param {AddChatData} data
  */
-async function validateAddChatData(data){
+async function validateAddChatData(req) {
+    const data = req.body
+    data.sub = req.sub;
     if (data.to.length <= 1)
-        throw new Error("Not found resiver id.");
+        throw { error: "Not found resiver id." };
 
     else if (data.type != "group" && data.type != "private")
-        throw new Error("Type not suppered.");
+        throw { error: "Type not suppered. only for ['group', 'private']" };
 
     else if (data.type === "private" && !!data.chatName)
-        throw new Error("Private chat can not have a name.");
+        throw { error: "Private chat can not have a name." };
+
+    else if (data.type === "private" && !data.image)
+        throw { error: "Private chat not support for chat image." };
 
     else if (data.type === "group" && !data.chatName)
-        throw new Error("Group chat is require chat name.");
+        throw { error: "Group chat is require chat name." };
 
     else if (data.type === "group" && !data.image)
-        throw new Error("Group chat is require chat img.");
+        throw { error: "Group chat is require chat img." };
 
     else if (!await isUsersExist(data.to))
-        throw new Error("User id dos not exist.");
+        throw { error: "User id dos not exist." };
 
     else return data;
 }
 
+async function mapModel(data) {
+    return {
+        type: data.type,
+        chatID: data._id,
+        chatName: data.type == "group"
+            ? data.chatName
+            : data.members?.filter(m => m._id != data.sub)[0]._id,
+        image: data.image,
+        color: data.color,
+        lastMessage: [],
+    }
+}
+
 /**
- *
  * @param {AddChatData} data
  */
-async function addChatToDatabase(data){
-    const validData = await validateAddChatData(data);
+async function addChatToDatabase(data) {
     const chat = new ChatDao({
-        type: validData.type,
-        members: validData.to.map(i=>{
-            return {_id:i, joinedTime: Date.now()};
+        type: data.type,
+        members: data.to.map(i => {
+            return { _id: i, joinedTime: Date.now() };
         }),
-        color: validData.color,
-        image: validData.image,
-        chatName: validData.chatName
+        color: data.color,
+        image: data.image,
+        chatName: data.chatName
     });
     return await chat.save();
 }
 
 /**
- *
  * @param {string[]} users
  */
-async function isUsersExist(users){
+async function isUsersExist(users) {
     const data = await UserDao.count({
-        $or:users.map(i=>{
-            return {_id:i}
+        $or: users.map(i => {
+            return { _id: i }
         })
     });
     return data === users.length;
+}
+
+/**
+ *
+ * @param {AddChatData} data
+ */
+async function fillterExistPrivateChat(data) {
+    const chat = await ChatDao.aggregate([{
+        '$match': {
+            '$and': [
+                { 'members': { '$size': 2 } },
+                { 'members._id': { $all: data.to } }
+            ]
+        }
+    },
+    {
+        '$project': { '_id': 1 }
+    }]);
+
+    console.log(chat);;
+
+    if (chat.length == 0)
+        return data;
+    else throw {
+        err: "Chat already exists",
+        chatId: chat[0]._id
+    }
 }
 
 module.exports = addChatEndpoint;
