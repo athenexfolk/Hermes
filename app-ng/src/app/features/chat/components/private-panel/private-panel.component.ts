@@ -49,7 +49,7 @@ export class PrivatePanelComponent {
     console.debug(" Add chat connector");
     this.chatService.addChat({
       to:[user._id],
-      type:"private"
+      type: ChatType.PRIVATE
     }).subscribe({
       next:this.onAddConnectorSeccess,
       error:this.onAddConnectorFalse

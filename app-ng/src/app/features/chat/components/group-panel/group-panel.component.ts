@@ -66,7 +66,7 @@ export class GroupPanelComponent {
     console.debug("addGroupChat");
     this.chatService.addChat({
       to: this.groupUsers.map(i=>i._id),
-      type:"group",
+      type:ChatType.GROUP,
       chatName: this.groupName,
       image: this.imageStr
     }).subscribe({
