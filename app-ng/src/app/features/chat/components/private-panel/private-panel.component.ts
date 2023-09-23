@@ -59,4 +59,3 @@ export class PrivatePanelComponent {
   private onAddConnectorSeccess = () => { console.log("Add success"); this.close.emit();}
   private onAddConnectorFalse = (e:unknown) => { console.log("Add False : ",e) }
 }
-
