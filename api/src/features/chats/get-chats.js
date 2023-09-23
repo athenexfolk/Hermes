@@ -109,10 +109,10 @@ async function mapModel(data) {
             color: c.color,
             lastestMessage: {
                 chatId: c.chatId,
-                messageId: c.lastestMessage[0]._id,
-                sender: c.lastestMessage[0].senderID,
-                timestamp: c.lastestMessage[0].sendTime,
-                chatContent: c.lastestMessage[0].content
+                messageId: c.lastestMessage[0]?._id,
+                sender: c.lastestMessage[0]?.senderID,
+                timestamp: c.lastestMessage[0]?.sendTime,
+                chatContent: c.lastestMessage[0]?.content
             }
         }
     })
