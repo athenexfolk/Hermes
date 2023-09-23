@@ -13,11 +13,12 @@ function getChatHistory(req, res, next) {
 
     getChatHistoryFromRef(req.params.ref, req.sub)
         .then(mapModel)
+        .then(i=>res.json(i))
         .catch(next);
 }
 
 async function mapModel(h) {
-    returnh.map(i => {
+    return h.map(i => {
         return {
             chatId: i.chatID,
             messageId: i._id,
