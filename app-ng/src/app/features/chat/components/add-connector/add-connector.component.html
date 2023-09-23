@@ -65,12 +65,12 @@
         </ul>
       </div>
       <ng-container *ngIf="chatType === ChatType.PRIVATE; else group">
-        <PrivatePanel />
+        <PrivatePanel (close)="closeAddModal()" />
       </ng-container>
     </div>
   </div>
 </div>
 
 <ng-template #group>
-  <GroupPanel />
+  <GroupPanel (close)="closeAddModal()" />
 </ng-template>

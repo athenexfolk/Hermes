@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AuthorizationService } from './authorization.service';
 import { map, Subject, tap } from 'rxjs';
-import { MessageDto } from './model/messageDto';
+import { MessageDto } from '../models/message';
 
 interface MessageSendSto {
   chatId: string,
@@ -95,7 +95,10 @@ export class ChatPortalService {
 
   private mapToMessageDto = (data: MessageReceiveDto): MessageDto => {
     return {
-      chatContent: data.content,
+      chatContent: {
+        type: 'text',
+        value: data.content
+      },
       chatId: data.chatID,
       messageId: data.messageID,
       sender: data.senderID,

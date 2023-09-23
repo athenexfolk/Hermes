@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { filter } from 'rxjs';
+import { ChatType } from 'src/app/models/chat';
 import { User } from 'src/app/models/user';
 import { AuthorizationService } from 'src/app/service/authorization.service';
+import { ChatService } from 'src/app/service/chat.service';
 import { ProfileService } from 'src/app/service/profile.service';
 
 @Component({
@@ -15,9 +17,12 @@ export class PrivatePanelComponent {
   foundProfile: User | null = null;
   myId = '';
 
+  @Output() close = new EventEmitter();
+
   constructor(
     private profileService: ProfileService,
-    private authService: AuthorizationService
+    private authService: AuthorizationService,
+    private chatService: ChatService
   ) {
     this.myId = this.authService.myId;
   }
@@ -41,6 +46,15 @@ export class PrivatePanelComponent {
   }
 
   addConnector(user: User) {
-    
+    this.chatService
+      .addChat({
+        type: ChatType.PRIVATE,
+        to: [user._id],
+      })
+      .subscribe({
+        complete: () => {
+          this.close.emit();
+        },
+      });
   }
 }

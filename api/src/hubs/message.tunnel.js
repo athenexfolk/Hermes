@@ -78,14 +78,14 @@ function saveMessageToDb(context) {
         const chatmembers = (await ChatDao.findOne(
             { _id: context.chatID },
             { "members._id": 1, "_id": 0 })
-        ).members?.map(m => m.id) ?? [];
+        )?.members?.map(m => m.id) ?? [];
 
         if (chatmembers.lenght == 0)
             reject(new Error("Invalid Chat ID"));
 
         if (chatmembers.indexOf(context.senderID) < 0)
             reject(new Error("Permission denied"));
-            
+
         else {
             const msg = new MessageDao(context);
             await msg.save()

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ChatType } from 'src/app/models/chat';
 import { ChatContact } from 'src/app/models/chat-contact';
-import { MessageType } from 'src/app/models/message';
-import { ContactService } from 'src/app/service/contact.service';
+import { ChatService } from 'src/app/service/chat.service';
 
 @Component({
   selector: 'Sidebar',
@@ -15,12 +14,14 @@ export class SidebarComponent {
   filteredChatContacts: ChatContact[] = [];
   isMainSettingsOpen = false;
 
-  constructor(private contactService: ContactService) {}
+  constructor(private chatService: ChatService) {}
 
   ngOnInit() {
-    this.contactService.getContacts().subscribe((res) => {
-      this.chatContacts = res;
-      this.filteredChatContacts = res;
+    this.chatService.chatContacts$.subscribe({
+      next: (res) => {
+        this.chatContacts = res;
+        this.filteredChatContacts = res;
+      },
     });
   }
 

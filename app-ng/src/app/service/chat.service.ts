@@ -1,28 +1,44 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, tap } from 'rxjs';
 import { enviroment } from 'src/enviroment/enviroment.dev';
-import { ChatDto } from './model/chatDto';
-import { AddChatRequestDto } from './model/addChatRequestDto';
-import { MessageDto } from './model/messageDto';
+import { AddChatContactDto, ChatContact } from '../models/chat-contact';
+import { Message, MessageDto } from '../models/message';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
-
   private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private chatUrl = new URL("/chats", this.baseUrl);
+  private chatUrl = new URL('/chats', this.baseUrl);
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  chatContacts: BehaviorSubject<ChatContact[]>;
+  messages: BehaviorSubject<Message[]>;
+
+  constructor(private http: HttpClient) {
+    this.chatContacts = new BehaviorSubject<ChatContact[]>([]);
+    this.messages = new BehaviorSubject<Message[]>([]);
+
+    this.getChats().subscribe((chats) => {
+      this.chatContacts.next(chats);
+    });
+  }
+
+  get chatContacts$() {
+    return this.chatContacts.asObservable();
+  }
+
+  get messages$() {
+    return this.messages.asObservable();
+  }
 
   getChats() {
-    return this.http
-      .get<ChatDto[]>(this.chatUrl.toString()).pipe(
-        tap(i=>console.debug(`Loading ${i.length} chats seccesss`))
-      );
+    return this.http.get<ChatContact[]>(this.chatUrl.toString()).pipe(
+      tap((chats) => {
+        this.chatContacts.next(chats);
+        console.debug(`Loading ${chats.length} chats seccesss`);
+      })
+    );
   }
 
   /**
@@ -31,13 +47,34 @@ export class ChatService {
   getMessages(id: string) {
     const chatUrl = new URL(`/chats/${id}`, this.baseUrl);
     return this.http.get<MessageDto[]>(chatUrl.toString()).pipe(
-      tap(i=>console.debug(`Loading chat ${id} : ${i.length} messages`)),
+      tap((i) => console.debug(`Loading chat ${id} : ${i.length} messages`)),
+      map((message) => !!(message as any).error ? [] : message as MessageDto[]),
+      map((messages) =>
+        messages.map(
+          (message) =>
+            ({
+              chatID: message.chatId,
+              content: {
+                type: message.chatContent.type,
+                data: message.chatContent.value,
+              },
+              senderID: message.sender,
+              sendTime: message.timestamp,
+            } as Message)
+        )
+      ),
+      tap((messages) => this.messages.next(messages))
     );
   }
 
-  addChat(data: AddChatRequestDto) {
-    return this.http.post<ChatDto>(this.chatUrl.toString(),data).pipe(
-      tap(console.debug)
+  addChat(data: AddChatContactDto) {
+    return this.http.post<ChatContact>(this.chatUrl.toString(), data).pipe(
+      tap(console.debug),
+      tap(() =>
+        this.getChats().subscribe((chats) => {
+          this.chatContacts.next(chats);
+        })
+      )
     );
   }
 }

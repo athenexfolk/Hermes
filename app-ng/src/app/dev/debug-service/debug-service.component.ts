@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map, tap } from 'rxjs';
+import { ChatType } from 'src/app/models/chat';
 import { AuthorizationService } from 'src/app/service/authorization.service';
 import { ChatPortalService } from 'src/app/service/chat-portal.service';
 import { ChatService } from 'src/app/service/chat.service';
@@ -68,9 +69,9 @@ export class DebugServiceComponent implements OnInit {
   addChat(){
     this.chat.addChat({
       to:["saksit"],
-      type: "group",
+      type: ChatType.GROUP,
       chatName: "de nada",
-      color:"green",
+      colour:"green",
       image:"sealook"
     }).subscribe();
   }

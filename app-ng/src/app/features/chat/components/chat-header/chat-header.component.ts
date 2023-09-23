@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChatService } from 'src/app/service/chat.service';
 
 @Component({
   selector: 'ChatHeader',
