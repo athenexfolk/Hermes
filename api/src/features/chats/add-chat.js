@@ -46,7 +46,7 @@ async function validateAddChatData(req) {
     else if (data.type === "private" && !!data.chatName)
         throw { error: "Private chat can not have a name." };
 
-    else if (data.type === "private" && !data.image)
+    else if (data.type === "private" && !!data.image)
         throw { error: "Private chat not support for chat image." };
 
     else if (data.type === "group" && !data.chatName)
