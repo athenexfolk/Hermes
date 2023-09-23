@@ -46,15 +46,16 @@ export class PrivatePanelComponent {
   }
 
   addConnector(user: User) {
-    this.chatService
-      .addChat({
-        type: ChatType.PRIVATE,
-        to: [user._id],
-      })
-      .subscribe({
-        complete: () => {
-          this.close.emit();
-        },
-      });
+    console.debug(" Add chat connector");
+    this.chatService.addChat({
+      to:[user._id],
+      type: ChatType.PRIVATE
+    }).subscribe({
+      next:this.onAddConnectorSeccess,
+      error:this.onAddConnectorFalse
+    });
   }
+
+  private onAddConnectorSeccess = () => { console.log("Add success"); this.close.emit();}
+  private onAddConnectorFalse = (e:unknown) => { console.log("Add False : ",e) }
 }

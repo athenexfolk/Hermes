@@ -63,16 +63,16 @@ export class GroupPanelComponent {
   }
 
   addGroupChat() {
-    this.chatService
-      .addChat({
-        type: ChatType.GROUP,
-        chatName: this.groupName,
-        to: this.groupUsers.map((user) => user._id),
-        image : this.imageStr
-      })
-      .subscribe(() => {
-        this.close.emit();
-      });
+    console.debug("addGroupChat");
+    this.chatService.addChat({
+      to: this.groupUsers.map(i=>i._id),
+      type:ChatType.GROUP,
+      chatName: this.groupName,
+      image: this.imageStr
+    }).subscribe({
+      next: this.onAddConnectorSeccess,
+      error: this.onAddConnectorFalse
+    })
   }
 
   onFileUpload(e: Event) {
@@ -87,4 +87,7 @@ export class GroupPanelComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  private onAddConnectorSeccess = () => { console.log("Add success"); this.close.emit(); }
+  private onAddConnectorFalse = (e:unknown) => { console.log("Add False : ",e) }
 }

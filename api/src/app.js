@@ -11,8 +11,9 @@ var authRouter = require('./authorization/auth.rout');
 var profileRouter = require('./features/profiles/profile.route');
 var chatRouter = require('./features/chats/chat.route');
 
+var ErrrorHandlerMiddleware = require('./middleware/EerrorHandler.middleware');
+
 const connectDatabase = require('./config/mongodb.config');
-const ChatDao = require('./dao/chat.dao');
 
 var app = express();
 
@@ -30,30 +31,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", 'public')));
 
+
 app.use('/', indexRouter);
 app.use('/account', authRouter);
 app.use('/profile', profileRouter);
 app.use('/chats', chatRouter);
-
-// GET /tmp to run tmp script for dev
-app.get('/temp', async (req, res) => {
-    const chat_contact = req.body
-    const newchat = new ChatDao(
-        {
-            type: chat_contact.type,
-            members: [
-                { _id: chat_contact.id, joinedTime: Date.now() }
-            ],
-            color: chat_contact.color,
-            image: chat_contact.image
-        }
-    )
-    await newchat.save()
-    res.json({
-        newchat
-    }
-    )
-})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -61,16 +43,6 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-
+app.use(ErrrorHandlerMiddleware);
 
 module.exports = app;
