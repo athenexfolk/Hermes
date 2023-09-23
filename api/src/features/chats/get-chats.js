@@ -14,27 +14,22 @@ const UserDao = require("../../dao/user.dao")
  */
 
 /* GET all contacts User*/
-const contactEndpoint = async (req, res) => {
+const contactEndpoint = async (req, res, next) => {
     const id = req.sub
-    if (!id) {
-        return res.status(HTTP_STATUS.NOT_FOUND).json({
-            error: "Value is null",
-            msg: "Check your token"
-        })
-    }
+    console.assert(!!id, "Invalid user id")
 
     await loadContactFromDb(id)
         .then(fillterEmptyList)
         .then(mapModel)
         .then(i => res.json(i))
-        .catch(i => res.status(HTTP_STATUS.NOT_FOUND).json(i));
+        .catch(next);
 }
 
-async function fillterEmptyList(data){
+async function fillterEmptyList(data) {
     if (Array.isArray(data) && data.length == 0)
         throw new {
-            error:"Chat not found",
-            msg:""
+            error: "Chat not found",
+            msg: ""
         }
     else return data
 }
@@ -111,7 +106,14 @@ async function mapModel(data) {
             type: c.type,
             chatName: c.chatName ?? c.userInfo[0].displayname ?? null,
             image: c.avatar ?? c.userInfo[0].avatar ?? null,
-            color: c.color
+            color: c.color,
+            lastestMessage: {
+                chatId: c.chatId,
+                messageId: c.lastestMessage[0]._id,
+                sender: c.lastestMessage[0].senderID,
+                timestamp: c.lastestMessage[0].sendTime,
+                chatContent: c.lastestMessage[0].content
+            }
         }
     })
 }
