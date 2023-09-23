@@ -27,7 +27,7 @@ const contactEndpoint = async (req, res, next) => {
 
 async function fillterEmptyList(data) {
     if (Array.isArray(data) && data.length == 0)
-        throw new {
+        throw {
             error: "Chat not found",
             msg: ""
         }
