@@ -11,8 +11,9 @@ var authRouter = require('./authorization/auth.rout');
 var profileRouter = require('./features/profiles/profile.route');
 var chatRouter = require('./features/chats/chat.route');
 
+var ErrrorHandlerMiddleware = require('./middleware/EerrorHandler.middleware');
+
 const connectDatabase = require('./config/mongodb.config');
-const ChatDao = require('./dao/chat.dao');
 
 var app = express();
 
@@ -29,6 +30,8 @@ app.use(express.json({limit: '25mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", 'public')));
+
+app.use(ErrrorHandlerMiddleware);
 
 app.use('/', indexRouter);
 app.use('/account', authRouter);
