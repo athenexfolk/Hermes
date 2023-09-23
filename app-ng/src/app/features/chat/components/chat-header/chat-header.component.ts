@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChatService } from 'src/app/service/chat.service';
+import { ChatContact } from 'src/app/models/chat-contact';
 
 @Component({
   selector: 'ChatHeader',
@@ -7,7 +7,7 @@ import { ChatService } from 'src/app/service/chat.service';
   styleUrls: ['./chat-header.component.scss']
 })
 export class ChatHeaderComponent {
-  forContact: any
+  @Input() forContact!: ChatContact
 
   @Output() onToggleChatSettings = new EventEmitter();
 

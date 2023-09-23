@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ChatContact } from 'src/app/models/chat-contact';
 
 @Component({
   selector: 'ChatSettings',
@@ -6,4 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./chat-settings.component.scss']
 })
 export class ChatSettingsComponent {
+  @Input() forContact!: ChatContact
 }
