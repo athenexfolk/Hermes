@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, map, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, of, tap } from 'rxjs';
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AddChatContactDto, ChatContact } from '../models/chat-contact';
 import { Message, MessageDto } from '../models/message';
@@ -12,25 +12,23 @@ export class ChatService {
   private baseUrl = new URL(enviroment.API_SERVER_URL);
   private chatUrl = new URL('/chats', this.baseUrl);
 
-  chatContacts: BehaviorSubject<ChatContact[]>;
-  messages: BehaviorSubject<Message[]>;
+  private chatContacts: BehaviorSubject<ChatContact[]>;
+  // messages: BehaviorSubject<Message[]>;
 
   constructor(private http: HttpClient) {
     this.chatContacts = new BehaviorSubject<ChatContact[]>([]);
-    this.messages = new BehaviorSubject<Message[]>([]);
+    // this.messages = new BehaviorSubject<Message[]>([]);
 
-    this.getChats().subscribe((chats) => {
-      this.chatContacts.next(chats);
-    });
+    this.getChats().subscribe();
   }
 
   get chatContacts$() {
     return this.chatContacts.asObservable();
   }
 
-  get messages$() {
-    return this.messages.asObservable();
-  }
+  // get messages$() {
+  //   return this.messages.asObservable();
+  // }
 
   getChats() {
     return this.http.get<ChatContact[]>(this.chatUrl.toString()).pipe(
@@ -48,7 +46,6 @@ export class ChatService {
     const chatUrl = new URL(`/chats/${id}`, this.baseUrl);
     return this.http.get<MessageDto[]>(chatUrl.toString()).pipe(
       tap((i) => console.debug(`Loading chat ${id} : ${i.length} messages`)),
-      map((message) => !!(message as any).error ? [] : message as MessageDto[]),
       map((messages) =>
         messages.map(
           (message) =>
@@ -60,21 +57,18 @@ export class ChatService {
               },
               senderID: message.sender,
               sendTime: message.timestamp,
+              messageID: message.messageId
             } as Message)
         )
       ),
-      tap((messages) => this.messages.next(messages))
+      // tap((messages) => this.messages.next(messages)),
     );
   }
 
   addChat(data: AddChatContactDto) {
     return this.http.post<ChatContact>(this.chatUrl.toString(), data).pipe(
       tap(console.debug),
-      tap(() =>
-        this.getChats().subscribe((chats) => {
-          this.chatContacts.next(chats);
-        })
-      )
+      tap(() =>this.getChats().subscribe())
     );
   }
 }

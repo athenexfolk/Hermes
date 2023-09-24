@@ -1,9 +1,10 @@
-<div
+<div class="flex flex-col">
+  <div
   class="flex gap-3"
   [ngClass]="isSelf ? 'self-end ms-20' : 'self-start me-20'"
 >
   <div
-    *ngIf="isSelf; else timePanel"
+    *ngIf="!isSelf; else timePanel"
     class="w-10 h-10 bg-gray-200 rounded-full grow-0 shrink-0"
   ></div>
   <div
@@ -16,6 +17,8 @@
     <!-- timePanel(msg.timestamp) -->
   </ng-container>
 </div>
+</div>
+
 
 <ng-template #imageMsg>
   <div class="rounded-lg overflow-hidden">

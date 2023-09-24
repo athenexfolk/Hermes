@@ -31,6 +31,15 @@ export class DebugServiceComponent implements OnInit {
     setInterval(() => {
       this.time = Date.now();
     }, 1000)
+
+    console.log("Notification : ", Notification.permission);
+    Notification.requestPermission()
+    const notification = new Notification("Hi there!",{
+      body:"body",
+      timestamp: Date.now(),
+      icon:"https://yt3.googleusercontent.com/5YVvCidyKGMmly6p-oZkdH4lntmjSeWuZXwSaFbtz6Qb60DQaLc_DBGd4DnrehX20olSg9E-Iw=s900-c-k-c0x00ffffff-no-rj"
+      // icon: "img"
+    });
   }
 
   login() {

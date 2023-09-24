@@ -24,7 +24,7 @@ export interface MessageContent {
   data: string;
 }
 
-interface chatContent {
+export interface chatContent {
   type: string;
   value: string;
 }

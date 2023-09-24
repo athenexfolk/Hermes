@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AuthorizationService } from './authorization.service';
 import { map, Subject, tap } from 'rxjs';
-import { MessageDto } from '../models/message';
+import { chatContent, MessageDto } from '../models/message';
 
 interface MessageSendSto {
   chatId: string,
@@ -12,7 +12,7 @@ interface MessageSendSto {
 
 interface MessageReceiveDto {
   senderID: string,
-  content: string,
+  content: object,
   chatID: string,
   sendTime: Date,
   messageID: string
@@ -32,7 +32,7 @@ interface ServerToClientEvents {
 export class ChatPortalService {
 
   private socket!: Socket<ServerToClientEvents, ClientToServerEvents>;
-  messageSubject = new Subject<MessageReceiveDto>();
+  private messageSubject = new Subject<MessageReceiveDto>();
 
   public get messageStream$() {
     return this.messageSubject.asObservable().pipe(
@@ -95,10 +95,7 @@ export class ChatPortalService {
 
   private mapToMessageDto = (data: MessageReceiveDto): MessageDto => {
     return {
-      chatContent: {
-        type: 'text',
-        value: data.content
-      },
+      chatContent: data.content as chatContent,
       chatId: data.chatID,
       messageId: data.messageID,
       sender: data.senderID,

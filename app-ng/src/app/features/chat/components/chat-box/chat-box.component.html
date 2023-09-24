@@ -1,11 +1,14 @@
 <div class="flex items-end relative h-full">
-  <div *ngIf="messages.length; else emptyMsg" class="flex grow flex-col-reverse gap-4 overflow-y-auto p-4 max-h-full">
-
-      <Message
-          *ngFor="let message of messages"
-              [isSelf]="message.senderID === myId"
-              [msg]="message"
-          />
+  <button (click)="loadMessages()">load more</button>
+  <div
+    *ngIf="messages.length; else emptyMsg"
+    class="flex grow flex-col-reverse gap-4 overflow-y-auto p-4 max-h-full"
+  >
+    <Message
+      *ngFor="let message of messages"
+      [isSelf]="message.senderID === myId"
+      [msg]="message"
+    />
   </div>
 </div>
 
