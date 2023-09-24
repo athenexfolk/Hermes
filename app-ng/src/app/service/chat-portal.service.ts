@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from "socket.io-client";
 import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AuthorizationService } from './authorization.service';
-import { map, Subject, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Subject, tap } from 'rxjs';
 import { chatContent, MessageDto } from '../models/message';
 
 interface MessageSendSto {
@@ -24,6 +24,10 @@ interface ClientToServerEvents {
 
 interface ServerToClientEvents {
   message: (context: MessageReceiveDto) => void;
+  "gone:offline": (uid: string) => void;
+  "go:online": (uid: string) => void;
+  "onlines": (uids: string[]) => void;
+  error: (msg: string, errmsg: string, stack: string) => void;
 }
 
 @Injectable({
@@ -33,11 +37,16 @@ export class ChatPortalService {
 
   private socket!: Socket<ServerToClientEvents, ClientToServerEvents>;
   private messageSubject = new Subject<MessageReceiveDto>();
+  private onlineUsersSubject = new BehaviorSubject<Set<string>>(new Set<string>());
 
   public get messageStream$() {
     return this.messageSubject.asObservable().pipe(
       map(this.mapToMessageDto),
     );
+  }
+
+  public get onlineUsers$() {
+    return this.onlineUsersSubject.asObservable();
   }
 
   constructor(
@@ -46,7 +55,15 @@ export class ChatPortalService {
     this.createPortal();
     this.addOnConnect();
     this.addOnMessage();
-    this.addLoggin();
+    this.addSomeoneGoOnline();
+    this.addSomeoneGoOffline();
+    this.addLoggingToStreamMessage();
+    this.addLoggingToOnlineUser();
+    this.addOnError();
+
+    window.onbeforeunload = () =>{
+      this.socket.disconnect();
+    }
   }
 
   send(chatID: string, context: chatContent) {
@@ -58,6 +75,16 @@ export class ChatPortalService {
     }
     else {
       console.warn("Socket not connected");
+    }
+  }
+
+  isUserIdOnline(id: string) {
+    return this.onlineUsers$.pipe(map(u => u.has(id)))
+  }
+
+  ngOnDestroy() {
+    if (this.socket) {
+      this.socket.disconnect();
     }
   }
 
@@ -73,6 +100,7 @@ export class ChatPortalService {
   private addOnConnect() {
     if (!!this.socket) {
       this.socket.on("connect", this.onConnect)
+      this.socket.on("onlines", (uids: string[]) => this.addOnlineUsers(...uids))
     }
   }
   private addOnMessage() {
@@ -81,8 +109,29 @@ export class ChatPortalService {
     }
   }
 
-  private addLoggin() {
+  private addOnError() {
+    if (!!this.socket) {
+      this.socket.on("error", console.error)
+    }
+  }
+
+  private addSomeoneGoOffline() {
+    if (!!this.socket) {
+      this.socket.on("gone:offline", this.removeOflineUsers)
+    }
+  }
+  private addSomeoneGoOnline() {
+    if (!!this.socket) {
+      this.socket.on("go:online", this.addOnlineUsers)
+    }
+  }
+
+  private addLoggingToStreamMessage() {
     this.messageStream$.subscribe(console.debug);
+  }
+
+  private addLoggingToOnlineUser() {
+    this.onlineUsers$.subscribe(console.debug);
   }
 
   private onConnect = () => {
@@ -101,5 +150,16 @@ export class ChatPortalService {
       sender: data.senderID,
       timestamp: data.sendTime
     }
+  }
+
+  private addOnlineUsers = (...users: string[]) => {
+    const old = this.onlineUsersSubject.getValue();
+    users.forEach(user => old.add(user));
+    this.onlineUsersSubject.next(old);
+  }
+  private removeOflineUsers = (...users: string[]) => {
+    const old = this.onlineUsersSubject.getValue();
+    users.forEach(user => old.delete(user));
+    this.onlineUsersSubject.next(old);
   }
 }
