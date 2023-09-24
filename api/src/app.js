@@ -30,7 +30,7 @@ app.use(express.json({limit: '25mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", 'public')));
-
+app.use('/imgs', process.env.IMAGE_STORAGE || express.static(path.join(__dirname, "..", 'images')));
 
 app.use('/', indexRouter);
 app.use('/account', authRouter);
