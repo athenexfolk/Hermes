@@ -16,7 +16,10 @@ export class MainSettingsComponent {
   @Output() onCloseMainSettings = new EventEmitter();
 
   isChangeDisplayNamePanelOpen = false;
-  newName = ''
+  isChangeAvatarPanelOpen = false;
+
+  newName = '';
+  newAvatar = '';
 
   constructor(
     private router: Router,
@@ -38,6 +41,16 @@ export class MainSettingsComponent {
 
   closeChangeDisplayNamePanel() {
     this.isChangeDisplayNamePanelOpen = false;
+    this.newName = '';
+  }
+
+  openChangeAvatarPanel() {
+    this.isChangeAvatarPanelOpen = true;
+  }
+
+  closeChangeAvatarPanel() {
+    this.isChangeAvatarPanelOpen = false;
+    this.newAvatar = '';
   }
 
   changeDisplayName() {
@@ -47,10 +60,28 @@ export class MainSettingsComponent {
     });
   }
 
+  changeAvatar() {
+    this.profileService.changeAvatar(this.newAvatar).subscribe((res) => {
+      this.isChangeAvatarPanelOpen = false;
+      this.myInfo.avatar = this.newAvatar;
+    });
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/auth', 'login']);
   }
 
-
+  onFileUpload(e: Event) {
+    let input = e.target as HTMLInputElement;
+    if (!input.files?.item(0)) return;
+    let file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.newAvatar = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 }

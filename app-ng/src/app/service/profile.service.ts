@@ -12,6 +12,8 @@ export class ProfileService {
   private baseUrl = new URL(enviroment.API_SERVER_URL);
   private profileUrl = new URL('/profile', this.baseUrl);
   private displayNameUrl = new URL('/profile/displayname', this.baseUrl);
+  private avatarUrl = new URL('/profile/avatar', this.baseUrl);
+
 
   myProfile: BehaviorSubject<User>;
 
@@ -66,6 +68,14 @@ export class ProfileService {
   changeDisplayName(newDisplayName: string) {
     return this.http
       .patch(`${this.displayNameUrl.toString()}/${newDisplayName}`, {})
+      .pipe(tap(() => this.getMyProfile().subscribe()));
+  }
+
+  changeAvatar(newAvatar: string) {
+    return this.http
+      .patch(this.avatarUrl.toString(), {
+        'b64-img': newAvatar
+      })
       .pipe(tap(() => this.getMyProfile().subscribe()));
   }
 }

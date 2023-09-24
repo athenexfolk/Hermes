@@ -27,7 +27,34 @@ export class TextBoxComponent {
         value: this.msg,
       });
 
-      this.msg = ''
+      this.msg = '';
     }
+  }
+
+  sendImage() {
+    if (this.img.length) {
+      this.chatPortal.send(this.chatId, {
+        type: MessageType.IMAGE,
+        value: this.img,
+      });
+      this.img = '';
+    }
+  }
+
+  onFileUpload(e: Event) {
+    let input = e.target as HTMLInputElement;
+    if (!input.files?.item(0)) return;
+    let file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.img = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  clearImage() {
+    this.img = '';
   }
 }

@@ -27,7 +27,7 @@
       <div
         class="w-24 h-24 bg-gray-200 rounded-full self-center overflow-hidden"
       >
-        <img [src]="myInfo.avatar" />
+        <img class="w-full h-full object-cover" [src]="myInfo.avatar" />
       </div>
       <p class="text-2xl font-bold">{{ myInfo.displayName }}</p>
       <p class="text-xs text-gray-500">{{ myInfo._id }}</p>
@@ -50,6 +50,26 @@
           /></svg
       ></span>
       Change name
+    </button>
+    <button
+      (click)="openChangeAvatarPanel()"
+      class="flex items-center gap-4 font-bold p-2 rounded-xl hover:bg-gray-100"
+    >
+      <span class="p-2 bg-gray-200 rounded-lg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </span>
+      Change Avatar
     </button>
     <button
       (click)="logout()"
@@ -134,3 +154,78 @@
     </div>
   </div>
 </div>
+
+<div
+  *ngIf="isChangeAvatarPanelOpen"
+  class="fixed top-0 left-0 h-screen w-screen z-40"
+>
+  <div
+    class="w-full h-full bg-black/25 backdrop-blur flex justify-center items-center p-6"
+  >
+    <div
+      class="relative bg-white rounded-lg p-6 pt-14 shadow max-w-sm w-full flex flex-col gap-4"
+    >
+      <button
+        (click)="closeChangeAvatarPanel()"
+        class="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <div
+        (click)="selectFile.click()"
+        class="bg-gray-100 hover:bg-gray-200 cursor-pointer rounded-full overflow-hidden w-32 h-32 self-center flex justify-center items-center"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          class="hidden"
+          (change)="onFileUpload($event)"
+          #selectFile
+        />
+        <img
+          *ngIf="newAvatar.length; else plusIcon"
+          [src]="newAvatar"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <button
+      (click)="changeAvatar()"
+        class="px-4 py-2 rounded-lg font-semibold text-white"
+        [ngClass]="
+          newAvatar.length ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-200'
+        "
+        [disabled]="!newAvatar.length"
+      >
+        Change
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #plusIcon>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    class="w-6 h-6"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+      clip-rule="evenodd"
+    />
+  </svg>
+</ng-template>
