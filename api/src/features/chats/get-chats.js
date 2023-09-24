@@ -104,6 +104,7 @@ async function mapModel(data) {
         return {
             chatID: c.chatId,
             type: c.type,
+            members: c.members,
             chatName: c.chatName ?? c.userInfo[0].displayname ?? null,
             image: c.avatar ?? c.userInfo[0].avatar ?? null,
             color: c.color,
