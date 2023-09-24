@@ -10,6 +10,7 @@ import { ProfileService } from 'src/app/service/profile.service';
 })
 export class ChatContactComponent {
   @Input() data!: ChatContact;
+  @Input() isOnline: boolean = false;
   profile!: User;
 
   constructor(private profileService: ProfileService) {}

@@ -76,7 +76,8 @@ export class ChatService {
             },
             sendTime: new Date(i.lastestMessage.timestamp),
           },
-          type: i.type
+          type: i.type,
+          members: i.members
         } as unknown as ChatContact))
       }),
       map(i => i.sort(this.sortByLastestMessageCompare)),
