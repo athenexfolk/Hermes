@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { delay, of, tap } from 'rxjs';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, delay, of, tap } from 'rxjs';
 import { ChatContact } from 'src/app/models/chat-contact';
 import { AuthorizationService } from 'src/app/service/authorization.service';
 import { ChatPortalService } from 'src/app/service/chat-portal.service';
@@ -9,23 +9,29 @@ import { ChatPortalService } from 'src/app/service/chat-portal.service';
   templateUrl: './chat-contact-list.component.html',
   styleUrls: ['./chat-contact-list.component.scss']
 })
-export class ChatContactListComponent implements OnInit {
+export class ChatContactListComponent implements OnInit, OnDestroy {
 
   @Input() chatContacts: ChatContact[] = []
 
   onlineUsers!: Set<string>;
+
+  subscriotpion!: Subscription;
 
   constructor(
     private chatPoartal: ChatPortalService,
     private authService: AuthorizationService
   ) { }
 
+  ngOnDestroy(): void {
+    this.subscriotpion.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.listenToUserStatus();
   }
 
   private listenToUserStatus() {
-    this.chatPoartal.onlineUsers$.pipe(
+    this.subscriotpion=this.chatPoartal.onlineUsers$.pipe(
       tap(u=>this.onlineUsers = u)
     ).subscribe();
   }
