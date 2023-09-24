@@ -89,6 +89,7 @@ export class ChatPortalService {
   }
 
   private createPortal() {
+    console.log(enviroment.CHAT_PORTAL_URL);
     const token = this.auth.token;
     this.socket = io(enviroment.CHAT_PORTAL_URL, {
       auth: {

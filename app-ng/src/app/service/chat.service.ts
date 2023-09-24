@@ -11,7 +11,7 @@ import { ChatPortalService } from './chat-portal.service';
 })
 export class ChatService {
   private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private chatUrl = new URL('/chats', this.baseUrl);
+  private chatUrl = new URL('api/chats', this.baseUrl);
 
   private chatContacts: BehaviorSubject<ChatContact[]>;
 
@@ -92,7 +92,7 @@ export class ChatService {
    * @param id chat id or message id
    */
   getMessages(id: string) {
-    const chatUrl = new URL(`/chats/${id}`, this.baseUrl);
+    const chatUrl = new URL(`api/chats/${id}`, this.baseUrl);
     return this.http.get<MessageDto[]>(chatUrl.toString()).pipe(
       tap((i) => console.debug(`Loading chat ${id} : ${i.length} messages`)),
       map((messages) =>

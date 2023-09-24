@@ -1,0 +1,11 @@
+FROM oven/bun
+
+WORKDIR /home/bun/app/
+COPY . .
+
+RUN bun install
+RUN bun add bcrypt
+
+EXPOSE 3000
+
+CMD [ "run", "bun" ]

@@ -1,6 +1,7 @@
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require("fs");
+const { hash } = require('./hashing.service');
 
 const IMAGE_STORAGE = process.env.IMAGE_STORAGE || path.join(__dirname, "..", "..", 'images');
 const ORIGIN = new URL(process.env.ORIGIN || 'http://localhost:3000');
@@ -19,9 +20,7 @@ async function saveImage(data) {
     if (fileType != 'image')
         return imgurl;
 
-    const salt = await bcrypt.genSalt();
-
-    const imgName = `${(await bcrypt.hash(rawData, salt)).replace(salt, "").replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
+    const imgName = `${(await hash(rawData)).replace(salt, "").replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
     const imgpath = path.join(IMAGE_STORAGE, imgName)
     ORIGIN.pathname = `/imgs/${imgName}`
 

@@ -1,7 +1,8 @@
 const UserDao = require("../dao/user.dao");
-const bcrypt = require("bcrypt")
+// const bcrypt = require("bcrypt")
 const HTTP_STATUS = require('../core/value-object');
-const { loadUserFromId } = require("../services/token.service")
+const { loadUserFromId } = require("../services/token.service");
+const { hashPassword } = require("../services/hashing.service");
 
 /**
  * @typedef {object} RegisterData
@@ -58,7 +59,8 @@ const registerEndpoint = async (req, res) => {
 
 async function createAccount(registerData) {
     try {
-        const passwordHash = bcrypt.hashSync(registerData.password, bcrypt.genSaltSync(10));
+        // const passwordHash = bcrypt.hashSync(registerData.password, bcrypt.genSaltSync(10));
+        const passwordHash = await hashPassword(registerData.password);
         const created = await new UserDao({
             _id: registerData.id,
             displayname: registerData.displayname,

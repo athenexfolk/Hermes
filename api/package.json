@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon --legacy-watch ./bin/www"
+    "dev": "nodemon --legacy-watch ./bin/www",
+    "bun":"bun ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -15,7 +16,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^7.5.1",
     "morgan": "~1.9.1",
     "socket.io": "^4.7.2"

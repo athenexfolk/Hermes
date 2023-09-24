@@ -3,12 +3,17 @@ version: '2'
 services:
     api:
         build:
-            context: .
+            context: ./api
             dockerfile: Dockerfile.bun
         ports:
             - 3000:3000
-        # volumes:
-        #     - ./:/usr/src/app
+
+    frontend:
+        build:
+            context: ./app-ng
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
 
     database:
         image: mongo

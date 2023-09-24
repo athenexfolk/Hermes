@@ -30,12 +30,12 @@ app.use(express.json({limit: '25mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", 'public')));
-app.use('/imgs', process.env.IMAGE_STORAGE || express.static(path.join(__dirname, "..", 'images')));
+app.use('/api/imgs', process.env.IMAGE_STORAGE || express.static(path.join(__dirname, "..", 'images')));
 
-app.use('/', indexRouter);
-app.use('/account', authRouter);
-app.use('/profile', profileRouter);
-app.use('/chats', chatRouter);
+app.use('/api/', indexRouter);
+app.use('/api/account', authRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/chats', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

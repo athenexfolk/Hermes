@@ -12,8 +12,8 @@ import { Response } from './model/response';
 })
 export class AuthorizationService {
   private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private loginUrl = new URL('account/login', this.baseUrl);
-  private regUrl = new URL('account/register', this.baseUrl);
+  private loginUrl = new URL('api/account/login', this.baseUrl);
+  private regUrl = new URL('api/account/register', this.baseUrl);
 
   private tokenKey = enviroment.TOKEN_KEY;
 

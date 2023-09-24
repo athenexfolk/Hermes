@@ -10,9 +10,9 @@ import { AuthorizationService } from './authorization.service';
 })
 export class ProfileService {
   private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private profileUrl = new URL('/profile', this.baseUrl);
-  private displayNameUrl = new URL('/profile/displayname', this.baseUrl);
-  private avatarUrl = new URL('/profile/avatar', this.baseUrl);
+  private profileUrl = new URL('api/profile', this.baseUrl);
+  private displayNameUrl = new URL('api/profile/displayname', this.baseUrl);
+  private avatarUrl = new URL('api/profile/avatar', this.baseUrl);
 
 
   myProfile: BehaviorSubject<User>;

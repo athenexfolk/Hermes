@@ -9,7 +9,7 @@ const authGuard = require("./auth.guard");
 
 var nsp;
 
-const NAMESPACE = "chat";
+const NAMESPACE = "api/chat";
 const AUTH_GUARD = authGuard;
 const ON_CONNECTION = onConnection;
 
