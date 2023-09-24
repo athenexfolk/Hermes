@@ -22,6 +22,7 @@ export class SidebarComponent {
         this.chatContacts = res;
         this.filteredChatContacts = res;
       },
+      error:(err) => console.log(err)
     });
   }
 

@@ -35,12 +35,8 @@ export class ChatService {
   }
 
   private sendReSortedContact = (msgDto: MessageDto) => {
-    console.log("sendReSortedContact");
-
     const chatContacts = this.chatContacts.getValue();
     const newMsgIndex = chatContacts.findIndex(i => i.chatID == msgDto.chatId);
-    console.log("index found: " + newMsgIndex);
-
     if (newMsgIndex < 0) {
       this.getChats().subscribe();
     }
@@ -58,8 +54,6 @@ export class ChatService {
 
       console.log(chatContacts.map(i => i.lastMassage.sendTime));
       const s = chatContacts.sort(this.sortByLastestMessageCompare);
-      console.log(s.map(i => i.lastMassage.sendTime));
-
       this.chatContacts.next(s);
     }
   }
@@ -86,7 +80,6 @@ export class ChatService {
         } as unknown as ChatContact))
       }),
       map(i => i.sort(this.sortByLastestMessageCompare)),
-      tap(console.log),
       tap((chats) => {
         this.chatContacts.next(chats);
         console.debug(`Loading ${chats.length} chats seccesss`);

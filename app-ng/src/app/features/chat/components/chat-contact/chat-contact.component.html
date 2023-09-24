@@ -1,20 +1,18 @@
-<div *ngIf="data"
+<div
+  *ngIf="data && profile"
   routerLink="/{{ data.chatID }}"
   [routerLinkActive]="['bg-gray-50']"
-  [routerLinkActiveOptions]="{exact: true}"
+  [routerLinkActiveOptions]="{ exact: true }"
   class="flex justify-between items-center connector px-6 py-3 cursor-pointer"
 >
   <div class="flex gap-4 items-center">
     <div class="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
-      <img [src]="data.image" class="object-cover h-full">
+      <img [src]="data.image" class="object-cover h-full" />
     </div>
     <div>
       <p class="font-bold">{{ data.chatName }}</p>
       <p class="text-gray-700 text-sm">
-        <!-- {`${ data.lastMassage.senderID === mockMe._id ? "Me" :
-          getUserInfoById(data.lastMassage.senderID) ?.displayName } :
-          ${data.lastMassage.content.data}`} -->
-        <!-- {{ data.lastMassage.content.data }} -->
+        {{ profile.displayName }} : {{ data.lastMassage.content.type === 'image' ? 'Send a picture' : data.lastMassage.content.data }}
       </p>
     </div>
   </div>

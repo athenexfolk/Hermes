@@ -9,8 +9,8 @@ import { ChatService } from 'src/app/service/chat.service';
   templateUrl: './chat-interface.component.html',
   styleUrls: ['./chat-interface.component.scss'],
 })
-export class ChatInterfaceComponent implements OnInit, OnDestroy{
-  isChatSettingsOpen = false;
+export class ChatInterfaceComponent implements OnInit, OnDestroy {
+  isChatSettingsOpen = true;
 
   chatContact: ChatContact | null = null;
 
@@ -18,10 +18,7 @@ export class ChatInterfaceComponent implements OnInit, OnDestroy{
 
   subsctiption: Subscription;
 
-  constructor(
-    private chatService: ChatService,
-    private route: ActivatedRoute
-  ) {
+  constructor(private chatService: ChatService, private route: ActivatedRoute) {
     this.subsctiption = new Subscription();
   }
   ngOnDestroy(): void {
@@ -29,23 +26,27 @@ export class ChatInterfaceComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      map(params => params.get('chatId') || ''),
-      tap(path=>this.acctiveChatId = path),
-      // tap(console.log),
-      tap(this.loadContactByPath)
-    ).subscribe();
+    this.route.paramMap
+      .pipe(
+        // tap(()=>this.subsctiption.unsubscribe()),
+        map((params) => params.get('chatId') || ''),
+        filter(chatId => !!chatId),
+        tap((path) => (this.acctiveChatId = path)),
+        // tap(console.log),
+        tap(this.loadContactByPath)
+      )
+      .subscribe();
   }
 
   onToggleChatSettings() {
     this.isChatSettingsOpen = !this.isChatSettingsOpen;
   }
 
-  private loadContactByPath = (path:string) =>{
-    const contact$ = this.chatService.chatContacts$.subscribe(c=>{
-      this.chatContact = c.find(c=>c.chatID === this.acctiveChatId ?? path) ?? null;
+  private loadContactByPath = (path: string) => {
+    const contact$ = this.chatService.chatContacts$.subscribe((c) => {
+      this.chatContact =
+        c.find((c) => c.chatID === this.acctiveChatId ?? path) ?? null;
     });
     this.subsctiption.add(contact$);
-  }
-
+  };
 }

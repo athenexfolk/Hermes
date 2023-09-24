@@ -17,6 +17,7 @@ export interface MessageDto {
 export enum MessageType {
   TEXT = 'text',
   IMAGE = 'image',
+  WELCOME = 'welcome_message'
 }
 
 export interface MessageContent {

@@ -1,7 +1,7 @@
 <div class="h-full w-full">
   <div
-    class="flex flex-col-reverse gap-4 w-full max-h-full min-h-full p-4 overflow-y-auto"
-    [ngClass]="{'justify-center': !messages.length}"
+    class="flex flex-col-reverse gap-6 w-full max-h-full min-h-full p-4 overflow-y-auto"
+    [ngClass]="{ 'justify-center': !messages.length }"
     (scroll)="scrollUp($event)"
     #parent
   >
@@ -12,7 +12,7 @@
         [msg]="message"
       />
     </ng-container>
-    <button *ngIf="messages.length && isButtonState" (click)="loadMessages()" class="px-4 py-2 rounded-lg bg-blue-400 text-white text-sm self-center font-semibold">Load more</button>
+    <p *ngIf="!isReadyToLoad">Loading</p>
   </div>
 </div>
 
