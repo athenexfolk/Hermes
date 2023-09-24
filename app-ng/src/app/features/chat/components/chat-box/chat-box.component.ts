@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, map, tap } from 'rxjs';
 import { Message } from 'src/app/models/message';
@@ -15,6 +21,12 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   myId: string = '';
   activedChatID?: string;
   oldestChatID?: string;
+
+  isReadyToLoad = true;
+
+  isButtonState = true;
+
+  @ViewChild('parent') parent!: ElementRef<HTMLElement>;
 
   subscriptions: Subscription = new Subscription();
 
@@ -55,23 +67,27 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     });
   };
 
-  scrollUp() {
-    console.log('scrollUp');
-    
+  scrollUp(e: Event) {
+    console.log();
+
+    let el = e.target as HTMLElement;
+    if (el.clientHeight - el.scrollHeight + 50 >= el.scrollTop) {
+      console.log('top');
+      if (this.isReadyToLoad) {
+
+        console.log('loading');
+
+        this.loadMessages();
+      }
+    }
   }
 
   private onLoadMessageSuccess = (message: Message[]) => {
+    this.isReadyToLoad = false;
     this.oldestChatID = message[message.length - 1].messageID;
-
-    // just for delayed loading
-    for (let i = 0; i < message.length; i++) {
-      setTimeout(() => {
-        this.pushMessage(message[i], true);
-      }, 200 * i);
-    }
-
-    // this is for real functional
-    // this.messages.push(...message);
+    this.messages.push(...message);
+    setTimeout(() => (this.isReadyToLoad = true), 1000);
+    console.log('return load status');
   };
 
   private subscriptMessageNotify = () => {
@@ -100,4 +116,17 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     if (oldMessage) this.messages.push(message);
     else this.messages.unshift(message);
   };
+
+  manageClickLoadMore() {
+    if (this.parent) {
+      let el = this.parent.nativeElement;
+      if (el.scrollHeight > el.clientHeight) {
+        console.log('yes');
+
+        this.isButtonState = false;
+      }
+
+      this.loadMessages();
+    }
+  }
 }
