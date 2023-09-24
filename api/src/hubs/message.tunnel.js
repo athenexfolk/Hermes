@@ -40,7 +40,7 @@ function onConnection(socket) {
 
 function addOnMessageHandler(socket) {
     socket.on("message:send", async context => {
-        if(!context.chatContent || !context.chatId)
+        if (!context.chatContent || !context.chatId)
             return saveMessageErrorHandeler(socket)(new Error("Couldn't send message [invalid chat id or empty message]"));
         const message = {
             senderID: socket.sub,
@@ -56,6 +56,24 @@ function addOnMessageHandler(socket) {
             .catch(saveMessageErrorHandeler(socket));
     });
 };
+
+function sendWelcomeMessage(chatID, sub) {
+    const message = {
+        senderID: sub,
+        content: {
+            type: "welcome_message",
+            value: "Let's talk 😃."
+        },
+        chatID: chatID,
+        sendTime: Date.now()
+    };
+    saveMessageToDb(message)
+        .then(result => {
+            message.messageID = result.result._id;
+            sendMessageTo(result.chatMembers, message);
+        })
+        .catch((e) => console.warn("Couldn't send welcome message",e));
+}
 
 function saveMessageErrorHandeler(socket) {
     return !!socket
@@ -120,3 +138,4 @@ function addOnMessage(io) {
 }
 
 module.exports = addOnMessage;
+module.exports.sendWelcomeMessage = sendWelcomeMessage;

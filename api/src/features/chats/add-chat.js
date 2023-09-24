@@ -1,6 +1,7 @@
 const HTTP_STATUS = require("../../core/value-object");
 const ChatDao = require("../../dao/chat.dao");
 const UserDao = require("../../dao/user.dao");
+const { sendWelcomeMessage } = require("../../hubs/message.tunnel");
 
 /**
  * @typedef {Object} AddChatData
@@ -27,7 +28,8 @@ function addChatEndpoint(req, res, next) {
         .then(fillterExistPrivateChat)
         .then(addChatToDatabase)
         .then(mapModel)
-        .then(data => res.json(data))
+        .then(data =>{res.json(data);return data})
+        .then(data=> sendWelcomeMessage(data.chatID,req.sub))
         .catch(next);
 }
 
