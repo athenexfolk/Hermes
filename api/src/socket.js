@@ -1,5 +1,6 @@
 const { Server } = require("socket.io");
 const addOnMessage = require("./hubs/message.tunnel");
+const addOnlineStatus = require("./hubs/online-status.tunnel");
 
 const corsConfig = { cors: { origin: "*", methods: ["GET", "POST"] } };
 
@@ -7,6 +8,7 @@ var io;
 
 function addFeature(io){
     addOnMessage(io);
+    addOnlineStatus(io);
 }
 
 
