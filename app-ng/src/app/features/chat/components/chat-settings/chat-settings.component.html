@@ -1,10 +1,11 @@
 <div class="grow-0 shrink-0 h-screen border-l min-h-0 transition-all w-80">
   <div class="flex flex-col gap-4 items-center p-6">
-    <div class="w-20 h-20 bg-gray-200 rounded-full">
+    <div class="w-20 h-20 bg-gray-200 rounded-full relative">
       <img
         [src]="forContact.image"
         class="w-full h-full rounded-full object-cover"
       />
+      </div>
       <div class="text-center">
         <p class="font-semibold">{{ forContact.chatName }}</p>
         <p class="text-xs"></p>
@@ -45,7 +46,6 @@
           <span class="block text-center text-xs"> Search </span>
         </div>
       </div>
-    </div>
     <div>
       <!-- <SettingsMenu /> -->
     </div>

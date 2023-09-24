@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, from, map, of, switchMap, tap } from 'rxjs';
-import { Message, MessageType } from 'src/app/models/message';
+import { Subscription, map, tap } from 'rxjs';
+import { Message } from 'src/app/models/message';
 import { AuthorizationService } from 'src/app/service/authorization.service';
 import { ChatPortalService } from 'src/app/service/chat-portal.service';
 import { ChatService } from 'src/app/service/chat.service';
@@ -50,22 +50,22 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   loadMessages = (chatId: string | null = null) => {
     let id = this.oldestChatID ?? this.activedChatID ?? chatId;
     if (!id) return;
-
-    console.log('Loading messages from ref => ', id);
     this.chatService.getMessages(id).subscribe({
       next: this.onLoadMessageSuccess,
-      error: (err) => {},
     });
   };
 
+  scrollUp() {
+    console.log('scrollUp');
+    
+  }
+
   private onLoadMessageSuccess = (message: Message[]) => {
-    console.log(message);
     this.oldestChatID = message[message.length - 1].messageID;
 
     // just for delayed loading
     for (let i = 0; i < message.length; i++) {
       setTimeout(() => {
-        console.log('pushing message ', i);
         this.pushMessage(message[i], true);
       }, 200 * i);
     }
@@ -77,7 +77,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   private subscriptMessageNotify = () => {
     const portal = this.chatPortal.messageStream$
       .pipe(
-        tap(console.log),
         map(
           (message) =>
             ({
@@ -91,7 +90,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
               messageID: message.messageId,
             } as Message)
         ),
-        tap(console.log),
         tap(this.pushMessage)
       )
       .subscribe();

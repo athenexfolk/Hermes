@@ -7,7 +7,7 @@ import { chatContent, MessageDto } from '../models/message';
 
 interface MessageSendSto {
   chatId: string,
-  chatContent: string
+  chatContent: chatContent
 }
 
 interface MessageReceiveDto {
@@ -49,11 +49,11 @@ export class ChatPortalService {
     this.addLoggin();
   }
 
-  send(chatID: string, context: object) {
+  send(chatID: string, context: chatContent) {
     if (!!this.socket && !!context) {
       this.socket.emit("message:send", {
         chatId: chatID,
-        chatContent: JSON.stringify(context)
+        chatContent: context
       })
     }
     else {

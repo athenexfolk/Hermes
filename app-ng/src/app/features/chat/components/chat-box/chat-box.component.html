@@ -1,8 +1,8 @@
-<div class="flex items-end relative h-full">
-  <button (click)="loadMessages()">load more</button>
+<div class="flex items-end relative h-full" #parent>
+  <!-- <button (click)="loadMessages()">load more</button> -->
   <div
     *ngIf="messages.length; else emptyMsg"
-    class="flex grow flex-col-reverse gap-4 overflow-y-auto p-4 max-h-full"
+    class="flex grow flex-col-reverse gap-4 overflow-y-auto p-4 max-h-full border-t" (scroll)="scrollUp()" #child
   >
     <Message
       *ngFor="let message of messages"

@@ -1,24 +1,31 @@
-<div class="flex flex-col">
+<div *ngIf="senderProfile" class="flex flex-col">
   <div
-  class="flex gap-3"
-  [ngClass]="isSelf ? 'self-end ms-20' : 'self-start me-20'"
->
-  <div
-    *ngIf="!isSelf; else timePanel"
-    class="w-10 h-10 bg-gray-200 rounded-full grow-0 shrink-0"
-  ></div>
-  <div
-    *ngIf="msg.content.type === MessageType.TEXT; else imageMsg"
-    class="bg-gray-200 px-4 py-2 rounded-lg max-w-md flex"
+    class="flex gap-3"
+    [ngClass]="isSelf ? 'self-end ms-20' : 'self-start me-20'"
   >
-    {{ msg.content.data }}
-  </div>
-  <ng-container *ngIf="isSelf">
-    <!-- timePanel(msg.timestamp) -->
-  </ng-container>
-</div>
-</div>
+    <div
+      *ngIf="!isSelf; else timePanel"
+      class="w-10 h-10 bg-gray-200 rounded-full grow-0 shrink-0 relative overflow-hidden"
+    >
+      <img [src]="senderProfile.avatar" class="w-full h-full object-cover" />
+    </div>
+    <div class="flex flex-col items-start gap-2">
+      <!-- <p *ngIf="!isSelf" class="text-sm">{{ senderProfile.displayName }}</p> -->
+      <div
+        *ngIf="msg.content.type === MessageType.TEXT; else imageMsg"
+        class="bg-gray-200 px-4 py-2 rounded-lg max-w-md flex"
+      >
+        {{ msg.content.data }}
+      </div>
+    </div>
 
+    <ng-container *ngIf="!isSelf">
+      <p class="text-xs text-gray-400 self-end">
+        {{ msg.sendTime | date : "shortTime" }}
+      </p>
+    </ng-container>
+  </div>
+</div>
 
 <ng-template #imageMsg>
   <div class="rounded-lg overflow-hidden">
@@ -27,5 +34,7 @@
 </ng-template>
 
 <ng-template #timePanel>
-  <!-- timePanel(msg.timestamp) -->
+  <p class="text-xs text-gray-400 self-end">
+    {{ msg.sendTime | date : "shortTime" }}
+  </p>
 </ng-template>

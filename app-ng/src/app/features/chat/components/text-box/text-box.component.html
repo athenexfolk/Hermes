@@ -1,10 +1,10 @@
 <div class="border-t px-6 py-3 flex items-center gap-4 h-16">
   <input
-      onKeyUp={onEnter}
-      ref={inputElement}
+      (keyup)="checkEnter($event)"
       type="text"
       placeholder="Aa"
       class="border rounded-full grow px-4 py-2"
+      [(ngModel)]="msg"
   >
   <button
       (click)="sendMessage()"

@@ -1,22 +1,13 @@
 <div *ngIf="chatContact" class="flex grow">
   <div class="h-screen grow">
-    <!-- <ChatHeader
-          forContact={chatInfo.contact}
-          settings={handleSettingsDisplay}
-      /> -->
     <ChatHeader
       [forContact]="chatContact"
       (onToggleChatSettings)="onToggleChatSettings()"
     />
     <div class="relative" style="height: calc(100vh - 136px)">
-      <!-- <ChatBox
-              data={chatInfo.history}
-              sendToChatBox={newMessage}
-          /> -->
       <ChatBox />
     </div>
-    <!-- <TextBox chatId={chatInfo.contact.chatID} sendEmitter={receiveFromTextBox} /> -->
-    <TextBox />
+    <TextBox [chatId]="chatContact.chatID" />
   </div>
   <div>
     <ChatSettings *ngIf="isChatSettingsOpen" [forContact]="chatContact" />
