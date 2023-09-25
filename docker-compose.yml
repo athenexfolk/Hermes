@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+    api:
+        build:
+            context: ./api
+            dockerfile: Dockerfile.bun
+        ports:
+            - 3000:3000
+
+    frontend:
+        build:
+            context: ./app-ng
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+
+    database:
+        image: mongo
+        restart: always
+        ports:
+            - 27017:27017
+        volumes:
+            - db:/data/db
+
+volumes:
+    db:

@@ -1,0 +1,214 @@
+<div class="h-screen flex justify-center items-center relative">
+  <div
+    class="h-screen w-screen overlay-background absolute top-0 left-0 -z-10"
+  ></div>
+
+  <div
+    class="bg-white/90 w-80 p-10 rounded-lg shadow flex justify-center items-center"
+  >
+    <div class="flex flex-col">
+      <div class="flex flex-col justify-center items-center gap-2 mb-8">
+        <img src="assets/logo/logo-900.svg" class="w-16 h-16" />
+        <div class="font-bold text-xl">HermesCS</div>
+      </div>
+
+      <ng-container *ngIf="step === 1">
+        <div class="mb-4">
+          <input
+            type="text"
+            class="w-full px-4 py-2 rounded-lg border mb-2"
+            placeholder="Username"
+            [(ngModel)]="username"
+          />
+          <p
+            *ngIf="isSearched && !isUsernameValid"
+            class="text-sm text-red-500"
+          >
+            This username is already used.
+          </p>
+        </div>
+        <div class="my-6 relative">
+          <button
+            type="button"
+            (click)="checkUsernameValidity()"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+          >
+            Next
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="step === 2">
+        <div class="w-32 h-32 mx-auto flex justify-center items-center mb-4 relative">
+          <input
+            class="hidden"
+            type="file"
+            (change)="onFileUpload($event)"
+            accept="image/*"
+            #selectFile
+          />
+
+          <div
+            *ngIf="image.length"
+            class="w-32 h-32 flex justify-center items-center"
+          >
+            <img [src]="image" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <div
+            class="absolute top-0 left-0 w-32 h-32 rounded-full overflow-hidden transition-all hover:backdrop-blur-sm hover:bg-gray-200/75 cursor-pointer"
+            [ngClass]="image.length ? 'bg-transparent' : 'bg-gray-50'"
+          >
+            <div
+              (click)="selectFile.click()"
+              class="w-32 h-32 flex justify-center items-center transition-all opacity-0 hover:opacity-100 text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input
+            type="text"
+            class="w-full px-4 py-2 rounded-lg border mb-2"
+            placeholder="Display name"
+            [(ngModel)]="displayName"
+          />
+        </div>
+        <div class="my-6 relative flex gap-4 justify-between">
+          <button
+            type="button"
+            (click)="goPreviousStep()"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-white border border-blue-500 text-blue-500 hover:border-blue-700 hover:text-blue-700 font-semibold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+              />
+            </svg>
+            Back
+          </button>
+          <button
+            type="button"
+            (click)="goNextStep()"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+          >
+            Next
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="step === 3">
+        <div class="mb-4">
+          <input
+            type="password"
+            class="w-full px-4 py-2 rounded-lg border"
+            placeholder="Password"
+            [(ngModel)]="password"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            type="password"
+            class="w-full px-4 py-2 rounded-lg border"
+            placeholder="Confirm Password"
+          />
+        </div>
+        <div class="my-6 relative flex gap-4 justify-between">
+          <button
+            type="button"
+            (click)="goPreviousStep()"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-white border border-blue-500 text-blue-500 hover:border-blue-700 hover:text-blue-700 font-semibold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+              />
+            </svg>
+            Back
+          </button>
+          <button
+            type="button"
+            (click)="register()"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+          >
+            Register
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+      <button routerLink="/auth/login" class="text-sm">Back to Login</button>
+    </div>
+  </div>
+</div>

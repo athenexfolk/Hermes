@@ -1,0 +1,9 @@
+<ul className="flex flex-col" *ngIf="chatContacts.length; else emptyChat">
+  <li *ngFor="let chatContact of chatContacts">
+    <ChatContact [data]="chatContact" [isOnline]="checkStatus(chatContact)" />
+  </li>
+</ul>
+
+<ng-template #emptyChat>
+  <div class="p-3 text-gray-500 font-semibold text-center">chat is empty</div>
+</ng-template>

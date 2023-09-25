@@ -1,0 +1,26 @@
+<div class="grow-0 shrink-0 w-96 h-screen border-r relative">
+  <div>
+      <div class="flex items-center justify-between px-6 py-3">
+          <Brand />
+          <AddConnector />
+      </div>
+      <div class="px-6 py-3">
+          <div class="mb-3">
+              <SearchBar />
+          </div>
+          <!-- <ConnectorFilter filterEmitter={filterChat} /> -->
+          <ConnectorFilter (onChangeFilter)="onChangeFilter($event)" />
+      </div>
+      <div
+          class="overflow-y-auto"
+          style="height: calc( 100vh - 256px )"
+      >
+          <ChatContactList [chatContacts]="filteredChatContacts" />
+      </div>
+  </div>
+  <MainSettings
+      [openStatus]="isMainSettingsOpen"
+      (onCloseMainSettings)="onCloseMainSettings()"
+  />
+  <OwnerPanel (onOpenMainSettings)="onOpenMainSettings()" />
+</div>

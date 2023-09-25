@@ -1,0 +1,15 @@
+<div *ngIf="chatContact" class="flex grow">
+  <div class="h-screen grow">
+    <ChatHeader
+      [forContact]="chatContact"
+      (onToggleChatSettings)="onToggleChatSettings()"
+    />
+    <div class="relative" style="height: calc(100vh - 136px)">
+      <ChatBox />
+    </div>
+    <TextBox [chatId]="chatContact.chatID" />
+  </div>
+  <div>
+    <!-- <ChatSettings *ngIf="isChatSettingsOpen" [forContact]="chatContact" /> -->
+  </div>
+</div>

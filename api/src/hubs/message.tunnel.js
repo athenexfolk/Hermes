@@ -29,7 +29,7 @@ const authGuard = require("./auth.guard");
 
 var nsp;
 
-const NAMESPACE = "chat";
+const NAMESPACE = "api/chat";
 const AUTH_GUARD = authGuard;
 const ON_CONNECTION = onConnection;
 
@@ -40,12 +40,12 @@ function onConnection(socket) {
 
 function addOnMessageHandler(socket) {
     socket.on("message:send", async context => {
-        if(!context.chatContent || !context.chatID)
+        if (!context.chatContent || !context.chatId)
             return saveMessageErrorHandeler(socket)(new Error("Couldn't send message [invalid chat id or empty message]"));
         const message = {
             senderID: socket.sub,
             content: context.chatContent,
-            chatID: context.chatId,
+            chatID: context.chatId.trim(),
             sendTime: Date.now()
         };
         saveMessageToDb(message)
@@ -57,15 +57,33 @@ function addOnMessageHandler(socket) {
     });
 };
 
+function sendWelcomeMessage(chatID, sub) {
+    const message = {
+        senderID: sub,
+        content: {
+            type: "welcome_message",
+            value: "Let's talk 😃."
+        },
+        chatID: chatID,
+        sendTime: Date.now()
+    };
+    saveMessageToDb(message)
+        .then(result => {
+            message.messageID = result.result._id;
+            sendMessageTo(result.chatMembers, message);
+        })
+        .catch((e) => console.warn("Couldn't send welcome message",e));
+}
+
 function saveMessageErrorHandeler(socket) {
     return !!socket
-        ? (e) => socket.emit("message", e.message)
+        ? (e) => socket.emit("error", e.message)
         : console.error;
 }
 
 function joinAuthRoom(socket) {
     socket.join(socket.sub);
-    console.debug(`'${socket.id}' connected to room '${socket.sub}'`);
+    console.debug(`'${socket.id}' connected as '${socket.sub}'`);
 }
 
 
@@ -77,11 +95,15 @@ function saveMessageToDb(context) {
     return new Promise(async (resolve, reject) => {
         const chatmembers = (await ChatDao.findOne(
             { _id: context.chatID },
-            { "members.id": 1, "_id": 0 })
-        ).members.map(m => m.id);
+            { "members._id": 1, "_id": 0 })
+        )?.members?.map(m => m.id) ?? [];
+
+        if (chatmembers.lenght == 0)
+            reject(new Error("Invalid Chat ID"));
 
         if (chatmembers.indexOf(context.senderID) < 0)
             reject(new Error("Permission denied"));
+
         else {
             const msg = new MessageDao(context);
             await msg.save()
@@ -116,3 +138,4 @@ function addOnMessage(io) {
 }
 
 module.exports = addOnMessage;
+module.exports.sendWelcomeMessage = sendWelcomeMessage;

@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ConnectorCard from "./ConnectorCard";
 import { User } from "../../../models/user";
-import { getProfile } from "../../../services/connector-service";
+import {
+    addPrivateChat,
+    getProfile,
+} from "../../../services/connector-service";
 
 function PrivatePanel() {
-    const [isSearchFound, setIsSearchFound] = useState(false);
+    const [isSearchFound, setIsSearchFound] = useState<boolean | null>(null);
     const [foundProfile, setFoundProfile] = useState<User | null>(null);
+
+    const tmpForm = useRef<HTMLInputElement>(null);
 
     const search = () => {
         setIsSearchFound(true);
-        getProfile("saksit").then(setFoundProfile);
+        if (tmpForm?.current && tmpForm.current.value.length) {
+            getProfile(tmpForm.current?.value)
+                .then(setFoundProfile)
+                .catch(() => {
+                    setIsSearchFound(false);
+                    setFoundProfile(null);
+                });
+        }
     };
 
     const addConnector = (user: User) => {
-        console.log(user);
+        addPrivateChat(user);
     };
 
     return (
@@ -25,6 +37,7 @@ function PrivatePanel() {
                         type="text"
                         className="grow bg-transparent focus:ring-transparent px-4 py-2"
                         placeholder="Username"
+                        ref={tmpForm}
                     ></input>
                     <button
                         onClick={search}
@@ -37,6 +50,9 @@ function PrivatePanel() {
             {isSearchFound && !!foundProfile && (
                 <ConnectorCard info={foundProfile} addAction={addConnector} />
             )}
+            {
+            isSearchFound === false && (<p>User not found</p>)
+            }
         </>
     );
 }

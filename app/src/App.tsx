@@ -1,25 +1,22 @@
 import "./App.css";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ChatInterface from "./layout/ChatInterface/ChatInterface";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Plain from "./pages/Plain";
-import Sidebar from "./layout/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import { socket } from "./socket";
 import { mockContact, mockHistory } from "./mockData";
+import { getMyProfile } from "./services/connector-service";
+import MainPage from "./pages/MainPage";
+import { AuthProvider } from "./context/AuthContext";
 
 const router = createBrowserRouter([
     {
         path: "/",
         loader: () => mockContact,
-        element: (
-            <div className="flex h-screen">
-                <Sidebar></Sidebar>
-                <Outlet />
-            </div>
-        ),
+        element: <MainPage />,
         children: [
             {
                 path: "",
@@ -51,6 +48,8 @@ const router = createBrowserRouter([
 
 function App() {
     const [isConnected, setIsConnected] = useState(socket.connected);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    getMyProfile().then();
 
     useEffect(() => {
         function onConnect() {
@@ -73,7 +72,9 @@ function App() {
 
     return (
         <>
-            <RouterProvider router={router} />
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
         </>
     );
 }

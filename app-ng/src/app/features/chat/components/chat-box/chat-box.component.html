@@ -1,0 +1,23 @@
+<div class="h-full w-full">
+  <div
+    class="flex flex-col-reverse gap-6 w-full max-h-full min-h-full p-4 overflow-y-auto"
+    [ngClass]="{ 'justify-center': !messages.length }"
+    (scroll)="scrollUp($event)"
+    #parent
+  >
+    <ng-container *ngIf="messages.length; else emptyMsg">
+      <Message
+        *ngFor="let message of messages"
+        [isSelf]="message.senderID === myId"
+        [msg]="message"
+      />
+    </ng-container>
+    <p *ngIf="!isReadyToLoad">Loading</p>
+  </div>
+</div>
+
+<ng-template #emptyMsg>
+  <div class="h-full w-full flex justify-center items-center">
+    <p class="text-gray-300 text-xl font-semibold">No messages yet</p>
+  </div>
+</ng-template>

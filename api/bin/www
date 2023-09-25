@@ -4,9 +4,9 @@
 console.clear();
 
 // Set Environment
-console.info(`Using enviroment file : ".env.${process.env.NODE_ENV||"DEV"}"`);
+console.info(`Using enviroment file : ".env.${process.env.NODE_ENV||"development"}"`);
 require('dotenv').config({
-    path: `.env.${process.env.NODE_ENV||"DEV"}`
+    path: `.env.${process.env.NODE_ENV||"development"}`
 })
 
 

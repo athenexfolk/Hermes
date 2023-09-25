@@ -1,0 +1,25 @@
+<div
+  *ngIf="data && profile"
+  routerLink="/{{ data.chatID }}"
+  [routerLinkActive]="['bg-gray-50']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="flex justify-between items-center connector px-6 py-3 cursor-pointer"
+>
+  <div class="flex gap-4 items-center">
+    <div class="w-14 h-14 rounded-full bg-gray-200 relative">
+      <img [src]="data.image" class="object-cover h-full rounded-full w-full" />
+      <div *ngIf="isOnline" class="absolute right-0 bottom-0">
+         <div class="w-3 h-3 rounded-full bg-green-500"></div>
+       </div>
+    </div>
+    <div>
+      <p class="font-bold">{{ data.chatName }}</p>
+      <p class="text-gray-700 text-sm">
+        {{ profile.displayName }} : {{ data.lastMassage.content.type === 'image' ? 'Send a picture' : data.lastMassage.content.data }}
+      </p>
+    </div>
+  </div>
+  <!-- {/* {!data.isRead ? (
+    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+    ) : ( "" )} */} -->
+</div>

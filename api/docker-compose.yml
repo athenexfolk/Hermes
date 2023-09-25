@@ -4,11 +4,11 @@ services:
     api:
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile.bun
         ports:
             - 3000:3000
-        volumes:
-            - ./:/usr/src/app
+        # volumes:
+        #     - ./:/usr/src/app
 
     database:
         image: mongo

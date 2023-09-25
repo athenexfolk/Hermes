@@ -1,13 +1,11 @@
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import logo from "../../public/logo/logo-900.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/auth-service";
+import { isLoggedIn, login } from "../services/auth-service";
 import { ErrorResponse } from "../models/response";
+import { useEffect, useState } from "react";
 function LoginPage() {
-    const navigate = useNavigate();
-
     type Person = {
         username: string;
         password: string;
@@ -48,13 +46,14 @@ function LoginPage() {
                 console.log(e.msg);
                 console.log(e.error);
             });
-        // auth.login({ email, password}, () => {
-        //   setError('email', {
-        //     type: 'manual',
-        //     message: 'Email or Password is invalid'
-        //   })
-        // })
     };
+const [loginStatus] = useState(!!isLoggedIn())
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(loginStatus) navigate('/')
+    }, [loginStatus, navigate])
+
 
     return (
         <div className="h-screen flex justify-center items-center relative">
@@ -66,7 +65,7 @@ function LoginPage() {
             >
                 <div className="bg-white/90 px-16 py-10 rounded-lg shadow flex flex-col">
                     <div className="flex flex-col justify-center items-center gap-2 mb-8">
-                        <img src={logo} className="w-16 h-16"></img>
+                        <img src={"logo/logo-900.svg"} className="w-16 h-16"></img>
                         <div className="font-bold text-xl">HermesCS</div>
                     </div>
                     <div className="mb-4">
