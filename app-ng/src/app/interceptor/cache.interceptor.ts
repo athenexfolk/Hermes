@@ -6,7 +6,7 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable, finalize, shareReplay } from 'rxjs';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CacheProfileInterceptor implements HttpInterceptor {

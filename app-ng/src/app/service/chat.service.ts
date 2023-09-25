@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, filter, map, of, tap } from 'rxjs';
 import { AddChatContactDto, ChatContact } from '../models/chat-contact';
 import { Message, MessageDto } from '../models/message';
 import { ChatPortalService } from './chat-portal.service';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

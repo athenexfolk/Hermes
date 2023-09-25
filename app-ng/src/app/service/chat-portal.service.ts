@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { AuthorizationService } from './authorization.service';
 import { BehaviorSubject, filter, map, Subject, tap } from 'rxjs';
 import { chatContent, MessageDto } from '../models/message';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environments/environment';
 
 interface MessageSendSto {
   chatId: string,

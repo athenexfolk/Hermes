@@ -5,7 +5,7 @@ import { Token } from './model/token';
 import { RegisterRequestDto } from './model/registerRequestDto';
 import { RegisterResponseDto } from './model/registerResponseDto';
 import { Response } from './model/response';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
