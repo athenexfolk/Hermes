@@ -11,6 +11,7 @@ import { Message, MessageDto } from 'src/app/models/message';
 import { AuthorizationService } from 'src/app/service/authorization.service';
 import { ChatPortalService } from 'src/app/service/chat-portal.service';
 import { ChatService } from 'src/app/service/chat.service';
+import { NotificationService } from 'src/app/service/notification.service';
 @Component({
   selector: 'ChatBox',
   templateUrl: './chat-box.component.html',
@@ -33,7 +34,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     private route: ActivatedRoute,
     private auth: AuthorizationService,
-    private chatPortal: ChatPortalService
+    private chatPortal: ChatPortalService,
+    private notify: NotificationService
   ) {}
 
   ngOnDestroy(): void {
@@ -140,6 +142,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   private youHaveNewMessage = (m: MessageDto) => {
     // new notification here.
+    this.notify.notifyMe(m);
     return (
       'new message from chat id ' + m.chatId,
       ' | now you in ' + this.activedChatID

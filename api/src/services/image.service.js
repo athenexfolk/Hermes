@@ -20,7 +20,7 @@ async function saveImage(data) {
     if (fileType != 'image')
         return imgurl;
 
-    const imgName = `${(await hash(rawData)).replace(salt, "").replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
+    const imgName = `${(await hash(rawData)).replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
     const imgpath = path.join(IMAGE_STORAGE, imgName)
     ORIGIN.pathname = `/api/imgs/${imgName}`
 

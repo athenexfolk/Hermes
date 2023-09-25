@@ -32,15 +32,10 @@ export class DebugServiceComponent implements OnInit {
       this.time = Date.now();
     }, 1000)
 
-    console.log("Notification : ", Notification.permission);
-    Notification.requestPermission()
-    const notification = new Notification("Hi there!",{
-      body:"body",
-      timestamp: Date.now(),
-      icon:"https://yt3.googleusercontent.com/5YVvCidyKGMmly6p-oZkdH4lntmjSeWuZXwSaFbtz6Qb60DQaLc_DBGd4DnrehX20olSg9E-Iw=s900-c-k-c0x00ffffff-no-rj"
-      // icon: "img"
-    });
   }
+
+
+
 
   login() {
     const user = "anirut";
@@ -53,35 +48,35 @@ export class DebugServiceComponent implements OnInit {
     });
   }
 
-  logout(){
+  logout() {
     this.auth.logout();
   }
 
-  register(){
+  register() {
     this.auth.register({
-      id: `anirut${Math.floor(Math.random() *1000)}`,
+      id: `anirut${Math.floor(Math.random() * 1000)}`,
       avatar: "",
-      displayname:"hi",
+      displayname: "hi",
       password: "1234",
     }).subscribe();
 
   }
 
-  getchats(){
+  getchats() {
     this.chat.getChats().subscribe();
   }
 
-  getchat(){
+  getchat() {
     this.chat.getMessages("650c0b302b86aac7c5dbaf4f").subscribe();
   }
 
-  addChat(){
+  addChat() {
     this.chat.addChat({
-      to:["saksit"],
+      to: ["saksit"],
       type: ChatType.GROUP,
       chatName: "de nada",
-      colour:"green",
-      image:"sealook"
+      colour: "green",
+      image: "sealook"
     }).subscribe();
   }
 
