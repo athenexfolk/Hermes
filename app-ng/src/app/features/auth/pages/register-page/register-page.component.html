@@ -17,12 +17,15 @@
           <input
             type="text"
             class="w-full px-4 py-2 rounded-lg border mb-2"
+            [ngClass]="{
+              'border-red-500 text-red-500': isSearched && !isUsernameValid
+            }"
             placeholder="Username"
             [(ngModel)]="username"
           />
           <p
             *ngIf="isSearched && !isUsernameValid"
-            class="text-sm text-red-500"
+            class="text-xs text-red-500"
           >
             This username is already used.
           </p>
@@ -31,7 +34,13 @@
           <button
             type="button"
             (click)="checkUsernameValidity()"
-            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg border text-white font-semibold transition-all"
+            [ngClass]="
+              username.length
+                ? 'border-blue-500 bg-blue-500 hover:bg-blue-700'
+                : 'border-gray-300 bg-gray-300 cursor-not-allowed'
+            "
+            [disabled]="!username.length"
           >
             Next
             <svg
@@ -53,7 +62,9 @@
       </ng-container>
 
       <ng-container *ngIf="step === 2">
-        <div class="w-32 h-32 mx-auto flex justify-center items-center mb-4 relative">
+        <div
+          class="w-32 h-32 mx-auto flex justify-center items-center mb-4 relative"
+        >
           <input
             class="hidden"
             type="file"
@@ -66,15 +77,19 @@
             *ngIf="image.length"
             class="w-32 h-32 flex justify-center items-center"
           >
-            <img [src]="image" class="w-full h-full rounded-full object-cover" />
+            <img
+              [src]="image"
+              class="w-full h-full rounded-full object-cover"
+            />
           </div>
           <div
-            class="absolute top-0 left-0 w-32 h-32 rounded-full overflow-hidden transition-all hover:backdrop-blur-sm hover:bg-gray-200/75 cursor-pointer"
-            [ngClass]="image.length ? 'bg-transparent' : 'bg-gray-50'"
+            class="absolute top-0 left-0 w-32 h-32 rounded-full overflow-hidden transition-all hover:bg-gray-300/50 cursor-pointer"
+            [ngClass]="image.length ? 'bg-transparent' : 'bg-gray-100'"
           >
             <div
               (click)="selectFile.click()"
-              class="w-32 h-32 flex justify-center items-center transition-all opacity-0 hover:opacity-100 text-gray-700"
+              class="w-32 h-32 flex justify-center items-center transition-all hover:opacity-100 text-gray-700"
+              [ngClass]="image.length ? 'opacity-0' : 'opacity-25'"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +141,14 @@
           <button
             type="button"
             (click)="goNextStep()"
-            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+            [disabled]="!displayName.length"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg text-white font-semibold transition-all"
+            [ngClass]="
+              displayName.length && image.length
+                ? 'border-blue-500 bg-blue-500 hover:bg-blue-700'
+                : 'border-gray-300 bg-gray-300 cursor-not-allowed'
+            "
+            [disabled]="!displayName.length || !image.length"
           >
             Next
             <svg
@@ -152,7 +174,7 @@
           <input
             type="password"
             class="w-full px-4 py-2 rounded-lg border"
-            placeholder="Password"
+            placeholder="Password (at least 8 characters)"
             [(ngModel)]="password"
           />
         </div>
@@ -161,6 +183,7 @@
             type="password"
             class="w-full px-4 py-2 rounded-lg border"
             placeholder="Confirm Password"
+            [(ngModel)]="cfPassword"
           />
         </div>
         <div class="my-6 relative flex gap-4 justify-between">
@@ -188,7 +211,15 @@
           <button
             type="button"
             (click)="register()"
-            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold"
+            class="flex gap-4 justify-center items-center w-full px-4 py-2 rounded-lg text-white font-semibold"
+            [ngClass]="
+              !(password.length >= 8) || !cfPassword || password !== cfPassword
+                ? 'border-gray-300 bg-gray-300 cursor-not-allowed'
+                : 'border-blue-500 bg-blue-500 hover:bg-blue-700'
+            "
+            [disabled]="
+              !(password.length >= 8) || !cfPassword || password !== cfPassword
+            "
           >
             Register
             <svg

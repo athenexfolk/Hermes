@@ -24,6 +24,7 @@
           placeholder="Password"
         />
       </div>
+      <p *ngIf="isSomethingWrong" class="text-xs text-red-500">Check your username or password.</p>
       <div class="my-6 relative">
         <button
           type="submit"

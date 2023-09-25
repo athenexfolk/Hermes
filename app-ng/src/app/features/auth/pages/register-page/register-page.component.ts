@@ -13,6 +13,7 @@ export class RegisterPageComponent {
   image = '';
   displayName = '';
   password = '';
+  cfPassword = ''
 
   step: number = 1;
 

@@ -1,4 +1,4 @@
-<div class="grow-0 shrink-0 w-96 h-screen border-r relative">
+<div class="h-screen border-r relative bg-white">
   <div>
       <div class="flex items-center justify-between px-6 py-3">
           <Brand />
@@ -8,7 +8,6 @@
           <div class="mb-3">
               <SearchBar />
           </div>
-          <!-- <ConnectorFilter filterEmitter={filterChat} /> -->
           <ConnectorFilter (onChangeFilter)="onChangeFilter($event)" />
       </div>
       <div

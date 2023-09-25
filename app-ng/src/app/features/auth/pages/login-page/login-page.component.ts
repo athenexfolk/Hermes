@@ -14,6 +14,8 @@ export class LoginPageComponent {
     password: ['', Validators.required],
   });
 
+  isSomethingWrong = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthorizationService,
@@ -24,12 +26,14 @@ export class LoginPageComponent {
     let username = this.loginForm.value.username;
     let password = this.loginForm.value.password;
     if (username && password && username.length && password.length) {
-      this.authService.login(
-        this.loginForm.value.username!,
-        this.loginForm.value.password!
-      ).subscribe(res => {
-        this.router.navigate(['/']);
-      });
+      this.authService
+        .login(this.loginForm.value.username!, this.loginForm.value.password!)
+        .subscribe({
+          next: (res) => {
+            this.router.navigate(['/']);
+          },
+          error: () => this.isSomethingWrong = true
+        });
     }
   }
 }
