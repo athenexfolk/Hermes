@@ -6,13 +6,13 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable, finalize, shareReplay } from 'rxjs';
-import { enviroment } from 'src/enviroment/enviroment.dev';
+import { environment } from 'src/environment/environment';
 
 @Injectable()
 export class CacheProfileInterceptor implements HttpInterceptor {
 
   private cache = new Map<URL, Observable<HttpEvent<unknown>>>();
-  private baseUrl = new URL(enviroment.API_SERVER_URL);
+  private baseUrl = new URL(environment.apiOrigin);
 
   constructor() { }
 

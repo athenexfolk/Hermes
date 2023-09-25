@@ -22,7 +22,7 @@ async function saveImage(data) {
 
     const imgName = `${(await hash(rawData)).replace(salt, "").replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
     const imgpath = path.join(IMAGE_STORAGE, imgName)
-    ORIGIN.pathname = `/imgs/${imgName}`
+    ORIGIN.pathname = `/api/imgs/${imgName}`
 
     fs.writeFile(imgpath, rawData, rawDataFormat, function (err) {
         console.log(err);

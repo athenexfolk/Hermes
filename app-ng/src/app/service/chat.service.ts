@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, filter, map, of, tap } from 'rxjs';
-import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AddChatContactDto, ChatContact } from '../models/chat-contact';
 import { Message, MessageDto } from '../models/message';
 import { ChatPortalService } from './chat-portal.service';
+import { environment } from 'src/environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  private baseUrl = new URL(enviroment.API_SERVER_URL);
+  private baseUrl = new URL(environment.apiOrigin);
   private chatUrl = new URL('api/chats', this.baseUrl);
 
   private chatContacts: BehaviorSubject<ChatContact[]>;

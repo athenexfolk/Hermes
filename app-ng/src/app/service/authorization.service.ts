@@ -1,21 +1,21 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter, map, tap } from 'rxjs';
-import { enviroment } from 'src/enviroment/enviroment.dev';
 import { Token } from './model/token';
 import { RegisterRequestDto } from './model/registerRequestDto';
 import { RegisterResponseDto } from './model/registerResponseDto';
 import { Response } from './model/response';
+import { environment } from 'src/environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthorizationService {
-  private baseUrl = new URL(enviroment.API_SERVER_URL);
-  private loginUrl = new URL('api/account/login', this.baseUrl);
-  private regUrl = new URL('api/account/register', this.baseUrl);
+  private baseUrl = new URL(environment.apiOrigin);
+  private loginUrl = new URL('/api/account/login', this.baseUrl);
+  private regUrl = new URL('/api/account/register', this.baseUrl);
 
-  private tokenKey = enviroment.TOKEN_KEY;
+  private tokenKey = environment.tokenKey;
 
   private tokenBehavior: BehaviorSubject<Token | null>;
 

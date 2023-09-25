@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { enviroment } from 'src/enviroment/enviroment.dev';
 import { HttpClient } from '@angular/common/http';
 import { ResponseUser, User } from '../models/user';
 import { BehaviorSubject, Observable, filter, map, switchMap, tap } from 'rxjs';
 import { AuthorizationService } from './authorization.service';
+import { environment } from 'src/environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private baseUrl = new URL(enviroment.API_SERVER_URL);
+  private baseUrl = new URL(environment.apiOrigin);
   private profileUrl = new URL('api/profile', this.baseUrl);
   private displayNameUrl = new URL('api/profile/displayname', this.baseUrl);
   private avatarUrl = new URL('api/profile/avatar', this.baseUrl);

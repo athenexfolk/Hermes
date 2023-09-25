@@ -34,7 +34,11 @@ async function bunHashPassword(password) {
     });
 }
 
-async function bunHash(data) { return Bun.hash(data) }
+async function bunHash(data) {
+    const hasher = new Bun.CryptoHasher("sha256");
+    hasher.update(data, "base64");
+    return hasher.digest("base64");
+}
 
 module.exports.comparePassword = comparePassword;
 module.exports.hashPassword = hashPassword;

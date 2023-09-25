@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from "socket.io-client";
-import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AuthorizationService } from './authorization.service';
 import { BehaviorSubject, filter, map, Subject, tap } from 'rxjs';
 import { chatContent, MessageDto } from '../models/message';
+import { environment } from 'src/environment/environment';
 
 interface MessageSendSto {
   chatId: string,
@@ -89,9 +89,9 @@ export class ChatPortalService {
   }
 
   private createPortal() {
-    console.log(enviroment.CHAT_PORTAL_URL);
+    console.log(environment.chatPortalUrl);
     const token = this.auth.token;
-    this.socket = io(enviroment.CHAT_PORTAL_URL, {
+    this.socket = io(environment.chatPortalUrl, {
       auth: {
         token: `${token?.tokenType} ${token?.accessToken}`
       }

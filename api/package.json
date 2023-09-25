@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon --legacy-watch ./bin/www",
-    "bun":"bun ./bin/www"
+    "start:bun":"bun ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
