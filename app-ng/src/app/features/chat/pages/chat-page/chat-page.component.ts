@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { ActivatedRoute, EventType, NavigationEnd, Router } from '@angular/router';
+import { filter, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-chat-page',
@@ -8,16 +8,16 @@ import { filter } from 'rxjs';
   styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPageComponent {
-  isMobileSidebarOpen = true;
+  isMobileSidebarOpen = false;
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
-      this.closeMobileSidebar()
-      // if(this.route.snapshot.paramMap.get('chatId')){
-      //   this.isMobileSidebarOpen = false
-      // }
+    this.router.events.pipe(filter(e=>e.type == EventType.Scroll)).subscribe(() => {
+      console.log(this.router.url);
+      const url = this.router.url;
+      if(url=='/') this.openMobileSidebar()
+      else this.closeMobileSidebar()
     })
   }
 

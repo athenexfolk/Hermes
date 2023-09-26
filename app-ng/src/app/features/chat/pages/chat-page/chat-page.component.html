@@ -7,6 +7,7 @@
   >
     <Sidebar />
     <button
+      hidden
       (click)="openMobileSidebar()"
       class="md:hidden fixed top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 z-20 transition-all duration-500"
       [ngClass]="
@@ -32,6 +33,7 @@
     </button>
 
     <button
+      hidden
       (click)="closeMobileSidebar()"
       class="md:hidden fixed top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 z-20 transition-all duration-500"
       [ngClass]="
