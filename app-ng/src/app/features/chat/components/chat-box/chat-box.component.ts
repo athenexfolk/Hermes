@@ -142,10 +142,10 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   private youHaveNewMessage = (m: MessageDto) => {
     // new notification here.
+    if(m.chatId != this.activedChatID && m.sender != this.auth.myId)
     this.notify.notifyMe(m);
     return (
-      'new message from chat id ' + m.chatId,
-      ' | now you in ' + this.activedChatID
+      'new message from chat id ' + m.chatId
     );
   };
 
