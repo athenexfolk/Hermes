@@ -1,5 +1,6 @@
 const HTTP_STATUS = require("../../core/value-object");
 const UserDao = require("../../dao/user.dao");
+const { saveImage } = require("../../services/image.service");
 
 async function patchAvatarEndpoint(req, res){
     await patchAvatar(req.sub,req.body).then(data=>{
@@ -13,11 +14,12 @@ async function patchAvatarEndpoint(req, res){
 
 async function patchAvatar(sub,body){
     const avatar = await validateAvatar(body);
+    const avatarUrl = await saveImage(avatar);
     const res = await UserDao.updateOne(
         {_id:sub},
         {
             $set:{
-                avatar:avatar
+                avatar:avatarUrl
             }
         }
     );
