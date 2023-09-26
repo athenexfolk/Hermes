@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-const saveImage = require("../../services/image.service")
+const {saveImage} = require("../../services/image.service")
+const ChangeImageOriginMiddelware = require("../../middleware/ImageOriginTransform.middelware")
 
 const chatSchema = mongoose.Schema({
     type: String,
@@ -13,6 +14,11 @@ const chatSchema = mongoose.Schema({
 }, { versionKey: false })
 
 chatSchema.pre('save', preSaveChatMiddleware)
+chatSchema.post('init', ChangeImageOriginMiddelware("image"))
+chatSchema.post('find', ChangeImageOriginMiddelware("image"))
+chatSchema.post('save', ChangeImageOriginMiddelware("image"))
+
+
 
 async function preSaveChatMiddleware(next) {
 
