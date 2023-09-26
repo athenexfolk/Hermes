@@ -30,6 +30,14 @@ docker-compose up
 
 If you change or install new npm packages or change docker file you can run `docker-compose up -d --no-deps --build <service name | let it empty>` to rebuild docker
 
+2. for dev on docker
+
+``` powershell
+docker build -t api-api -f .\Dockerfile.bun --no-cache .  && `
+docker-compose up api --force-recreate -d  && `
+docker image prune -f
+```
+
 ## APIs design
 
 ### Authentication

@@ -29,8 +29,11 @@ app.use(logger('dev'));
 app.use(express.json({limit: '25mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// static file
 app.use(express.static(path.join(__dirname, "..", 'public')));
-app.use('/api/imgs', process.env.IMAGE_STORAGE || express.static(path.join(__dirname, "..", 'images')));
+app.use('/api/imgs', express.static(path.join(process.env.IMAGE_STORAGE || __dirname, "..", 'images')));
+console.log('IMAGE SAVE TO : ', process.env.IMAGE_STORAGE || path.join(__dirname, "..", 'images'));
 
 app.use('/api/', indexRouter);
 app.use('/api/account', authRouter);

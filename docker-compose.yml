@@ -7,6 +7,8 @@ services:
             dockerfile: Dockerfile.bun
         ports:
             - 3000:3000
+        volumes:
+            - ./api/images:/home/bun/app/images
 
     frontend:
         build:

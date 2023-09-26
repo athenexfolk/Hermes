@@ -2,6 +2,7 @@ const HTTP_STATUS = require("../../core/value-object")
 const ChatDao = require("../../dao/chat.dao")
 const MessageDao = require("../../dao/message.dao")
 const UserDao = require("../../dao/user.dao")
+const { changeImageOriginSync } = require("../../services/image.service")
 
 /**
  * @typedef {object} ContactData
@@ -21,6 +22,7 @@ const contactEndpoint = async (req, res, next) => {
     await loadContactFromDb(id)
         .then(fillterEmptyList)
         .then(mapModel)
+        // .then(console.log)
         .then(i => res.json(i))
         .catch(next);
 }
@@ -106,7 +108,7 @@ async function mapModel(data) {
             type: c.type,
             members: c.members,
             chatName: c.chatName ?? c.userInfo[0].displayname ?? null,
-            image: c.avatar ?? c.userInfo[0].avatar ?? null,
+            image: changeImageOriginSync(c.avatar ?? c.userInfo[0].avatar ?? null)?.toString(),
             color: c.color,
             lastestMessage: {
                 chatId: c.chatId,

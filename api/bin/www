@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
 // Clear Console
-console.clear();
+// console.clear();
+console.log("################################################################");
+console.log("#                                                              #");
+console.log("#                      SERVER START                            #");
+console.log("#                                                              #");
+console.log("################################################################");
 
 // Set Environment
 console.info(`Using enviroment file : ".env.${process.env.NODE_ENV||"development"}"`);
