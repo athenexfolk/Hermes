@@ -5,10 +5,10 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile.bun
-        ports:
-            - 3000:3000
+        environment:
+            - ORIGIN=https://p.villsource.tk
         volumes:
-            - ./api/images:/home/bun/app/images
+            - ./images:/home/bun/app/images
 
     frontend:
         build:
@@ -20,10 +20,8 @@ services:
     database:
         image: mongo
         restart: always
-        ports:
-            - 27017:27017
         volumes:
-            - db:/data/db
+            - ./db:/data/db
 
 volumes:
     db:
