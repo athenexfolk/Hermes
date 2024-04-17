@@ -5,7 +5,7 @@ import { authGuard } from './guard/auth.guard';
 import { reverseAuthGuard } from './guard/reverse-auth.guard';
 
 const routes: Routes = [
-  { path: 'debug', component: DebugServiceComponent, canMatch: [authGuard] },
+  { path: 'debug', component: DebugServiceComponent},
   {
     path: '',
     canActivate: [authGuard],

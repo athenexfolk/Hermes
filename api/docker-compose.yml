@@ -4,11 +4,15 @@ services:
     api:
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile.bun
+        environment:
+            - ORIGIN=http://localhost:3000
         ports:
             - 3000:3000
         volumes:
-            - ./:/usr/src/app
+            - ./images:/home/bun/app/images
+        networks:
+            - hermes
 
     database:
         image: mongo
@@ -17,6 +21,11 @@ services:
             - 27017:27017
         volumes:
             - db:/data/db
+        networks:
+            - hermes
 
 volumes:
     db:
+
+networks:
+    hermes:

@@ -8,6 +8,10 @@ export interface ChatContact {
   image: string;
   colour: string;
   lastMassage: Message;
+  members:{
+    _id: string;
+    joinedTime:Date
+  }[]
 }
 
 export interface AddChatContactDto {

@@ -1,6 +1,6 @@
 <ul className="flex flex-col" *ngIf="chatContacts.length; else emptyChat">
   <li *ngFor="let chatContact of chatContacts">
-    <ChatContact [data]="chatContact" />
+    <ChatContact [data]="chatContact" [isOnline]="checkStatus(chatContact)" />
   </li>
 </ul>
 

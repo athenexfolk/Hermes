@@ -1,6 +1,62 @@
-<div class="flex h-screen">
-  <Sidebar />
-  <div class="grow relative">
+<div class="md:flex h-screen relative">
+  <div
+    class="min-w-0 h-full md:w-96 absolute md:static top-0 z-20 overflow-hidden transition-all ease-in-out duration-500 bg-white"
+    [ngClass]="
+      isMobileSidebarOpen ? 'w-full left-0' : 'w-0 md:w-96 -left-full md:left-0'
+    "
+  >
+    <Sidebar />
+    <button
+      (click)="openMobileSidebar()"
+      class="md:hidden fixed top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 z-20 transition-all duration-500"
+      [ngClass]="
+        !isMobileSidebarOpen
+          ? 'opacity-25 visible left-4'
+          : 'opacity-0 invisible -left-full'
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-8 h-8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5L8.25 12l7.5-7.5"
+        />
+      </svg>
+    </button>
+
+    <button
+      (click)="closeMobileSidebar()"
+      class="md:hidden fixed top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 z-20 transition-all duration-500"
+      [ngClass]="
+        !isMobileSidebarOpen
+          ? 'opacity-0 invisible -right-full'
+          : 'opacity-25 visible right-4'
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-8 h-8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8.25 4.5l7.5 7.5-7.5 7.5"
+        />
+      </svg>
+    </button>
+  </div>
+  <div class="md:grow h-screen">
     <router-outlet></router-outlet>
   </div>
 </div>

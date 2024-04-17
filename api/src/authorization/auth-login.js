@@ -2,7 +2,8 @@ const HTTP_STATUS = require("../core/value-object");
 const jwt = require("jsonwebtoken");
 const { createTokenFromUserId } = require("../services/token.service");
 const UserDao = require("../dao/user.dao");
-const bcrypt = require("bcrypt")
+const { comparePassword } = require("../services/hashing.service");
+// const bcrypt = require("bcrypt")
 
 /**
  * @typedef {Object} TokenResponse
@@ -49,7 +50,7 @@ async function authorize(username, password) {
     const user = await UserDao.findOne({ _id: username })
     if (!user)
         return false
-    return await bcrypt.compare(password, user.passwordHash)
+    return await comparePassword(password, user.passwordHash)
 }
 
 

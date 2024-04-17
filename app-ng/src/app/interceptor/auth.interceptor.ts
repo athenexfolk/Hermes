@@ -7,12 +7,12 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { enviroment } from 'src/enviroment/enviroment.dev';
 import { AuthorizationService } from '../service/authorization.service';
+import { environment } from 'src/environments/environment';
 
 const EXCLUDE: { mehtod: string, endpoint: string }[] = [
-  { mehtod: "GET", endpoint: `${enviroment.API_SERVER_URL}/account/login` },
-  { mehtod: "POST", endpoint: `${enviroment.API_SERVER_URL}/account/register` }
+  { mehtod: "GET", endpoint: `${environment.apiOrigin}/account/login` },
+  { mehtod: "POST", endpoint: `${environment.apiOrigin}/account/register` }
 ]
 
 @Injectable()

@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DebugServiceComponent } from './dev/debug-service/debug-service.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { CacheProfileInterceptor } from './interceptor/cache.interceptor';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     HttpClientModule
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: CacheProfileInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]

@@ -29,7 +29,7 @@ const authGuard = require("./auth.guard");
 
 var nsp;
 
-const NAMESPACE = "chat";
+const NAMESPACE = "api/chat";
 const AUTH_GUARD = authGuard;
 const ON_CONNECTION = onConnection;
 
@@ -45,7 +45,7 @@ function addOnMessageHandler(socket) {
         const message = {
             senderID: socket.sub,
             content: context.chatContent,
-            chatID: context.chatId,
+            chatID: context.chatId.trim(),
             sendTime: Date.now()
         };
         saveMessageToDb(message)
@@ -77,13 +77,13 @@ function sendWelcomeMessage(chatID, sub) {
 
 function saveMessageErrorHandeler(socket) {
     return !!socket
-        ? (e) => socket.emit("message", e.message)
+        ? (e) => socket.emit("error", e.message)
         : console.error;
 }
 
 function joinAuthRoom(socket) {
     socket.join(socket.sub);
-    console.debug(`'${socket.id}' connected to room '${socket.sub}'`);
+    console.debug(`'${socket.id}' connected as '${socket.sub}'`);
 }
 
 

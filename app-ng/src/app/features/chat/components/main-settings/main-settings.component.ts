@@ -69,7 +69,9 @@ export class MainSettingsComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/auth', 'login']);
+    // this.router.navigate(['/auth', 'login']);
+    // reload for refreshing cached token in appllication.
+    location.reload();
   }
 
   onFileUpload(e: Event) {

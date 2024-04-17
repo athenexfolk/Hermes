@@ -1,0 +1,15 @@
+FROM oven/bun
+
+WORKDIR /home/bun/app/
+RUN mkdir images
+COPY package* .
+
+RUN bun install
+RUN bun add bcrypt
+COPY . .
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD [ "run", "start:bun" ]

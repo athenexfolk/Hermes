@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+    api:
+        build:
+            context: ./api
+            dockerfile: Dockerfile.bun
+        environment:
+            - ORIGIN=https://p.villsource.tk
+        volumes:
+            - ./images:/home/bun/app/images
+
+    frontend:
+        build:
+            context: ./app-ng
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+
+    database:
+        image: mongo
+        restart: always
+        volumes:
+            - ./db:/data/db
+
+volumes:
+    db:

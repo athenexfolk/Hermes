@@ -1,37 +1,69 @@
-const bcrypt = require('bcrypt');
 const path = require('path');
+const readable = require('stream').Readable;
 const fs = require("fs");
+const { hash } = require('./hashing.service');
 
 const IMAGE_STORAGE = process.env.IMAGE_STORAGE || path.join(__dirname, "..", "..", 'images');
-const ORIGIN = new URL(process.env.ORIGIN || 'http://localhost:3000');
+const IMAGE_URL = new URL('http://image@hermes/images.name');
 
 async function saveImage(data) {
     const imgurl = new URL(data);
-    console.assert(imgurl instanceof URL, "Image must be a URL");
 
     if (imgurl.protocol != 'data:')
         return imgurl;
 
-    var [metaData, rawData] = imgurl.pathname.split(",");
+    var [metaData, EncodedData] = imgurl.pathname.split(",");
     var [fileType, format] = metaData.split('/');
-    var [fileExtension, rawDataFormat] = format.split(";");
+    var [fileExtension, encodedType] = format.split(";");
 
-    if (fileType != 'image')
+    if (fileType != 'image' || encodedType != 'base64')
         return imgurl;
 
-    const salt = await bcrypt.genSalt();
-
-    const imgName = `${(await bcrypt.hash(rawData, salt)).replace(salt, "").replace(/[\\\/\.]/g, "-")}.${fileExtension}`;
+    // get name and location
+    const imgName = `${(await hash(EncodedData)).replace(/[\\\/\.]/g, "-").replace("=", "")}.${fileExtension}`;
     const imgpath = path.join(IMAGE_STORAGE, imgName)
-    ORIGIN.pathname = `/imgs/${imgName}`
 
-    fs.writeFile(imgpath, rawData, rawDataFormat, function (err) {
-        console.log(err);
-        if (err)
-            throw err
-    });
+    IMAGE_URL.pathname = imgName
 
-    return ORIGIN.toString();
+    console.log("Save Image To : " + imgpath);
+
+    const fileBuffer = Buffer.from(EncodedData, encodedType);
+    const stream = new readable();
+    stream.push(fileBuffer);
+    stream.push(null);
+    stream.pipe(fs.createWriteStream(imgpath));
+
+    return IMAGE_URL.toString();
 }
 
-module.exports = saveImage;
+function changeImageOrigin(data) {
+    return new Promise((resolve, reject) => {
+        if (!data) resolve(data);
+        try {
+            const img_url = new URL(process.env.ORIGIN || "http://localhost:3000");
+            const img = new URL(data)
+            if (img.username == "image" && img.hostname == "hermes") {
+                img_url.pathname = `api/imgs/${img.pathname}`
+                resolve(img_url);
+            }else resolve(data);
+        } catch (e) {
+            resolve(data);
+        }
+    });
+}
+
+function changeImageOriginSync(data) {
+    if (!data) return data;
+    try {
+        const img_url = new URL(process.env.ORIGIN || "http://localhost:3000");
+        const img = new URL(data)
+        if (img.username == "image" && img.hostname == "hermes") {
+            img_url.pathname = `api/imgs/${img.pathname}`
+            return img_url;
+        }else return data;
+    } catch (e) {
+        return data;
+    }
+}
+
+module.exports = { changeImageOrigin, saveImage, changeImageOriginSync };

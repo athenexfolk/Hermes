@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ChatType } from 'src/app/models/chat';
 import { ChatContact } from 'src/app/models/chat-contact';
 import { ChatService } from 'src/app/service/chat.service';
@@ -11,6 +11,8 @@ import { ChatService } from 'src/app/service/chat.service';
 export class SidebarComponent {
   chatContacts: ChatContact[] = [];
 
+  @Output() onOpenCollapse = new EventEmitter();
+
   filteredChatContacts: ChatContact[] = [];
   isMainSettingsOpen = false;
 
@@ -22,7 +24,7 @@ export class SidebarComponent {
         this.chatContacts = res;
         this.filteredChatContacts = res;
       },
-      error:(err) => console.log(err)
+      error: (err) => console.log(err),
     });
   }
 
@@ -48,5 +50,9 @@ export class SidebarComponent {
         );
       }
     }
+  }
+
+  openMobileCollapse() {
+    this.onOpenCollapse.emit();
   }
 }
